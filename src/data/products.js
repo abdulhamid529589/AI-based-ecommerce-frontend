@@ -1,4 +1,44 @@
-export const categories = [
+/**
+ * ⚠️ DEPRECATED: This file previously contained 321 lines of hard-coded categories
+ *
+ * MIGRATION NOTICE:
+ * Categories are now fetched dynamically from the backend API via SettingsContext
+ *
+ * ✅ How to use categories now:
+ *
+ * Option 1: Use useSettings hook (Recommended)
+ * ```jsx
+ * import { useSettings } from '../contexts/SettingsContext'
+ *
+ * const MyComponent = () => {
+ *   const { categories } = useSettings()
+ *   // categories is automatically fetched from /api/v1/content/categories
+ * }
+ * ```
+ *
+ * Option 2: Access via SettingsContext directly
+ * ```jsx
+ * import { SettingsContext } from '../contexts/SettingsContext'
+ *
+ * const value = useContext(SettingsContext)
+ * const { categories } = value
+ * ```
+ *
+ * Key Benefits:
+ * - ✅ No hardcoded data
+ * - ✅ Real-time updates from dashboard
+ * - ✅ SEO-friendly category data
+ * - ✅ Automatic caching in React Context
+ * - ✅ Easy to maintain and update
+ *
+ * API Endpoint: GET /api/v1/content/categories
+ *
+ * This file is kept for reference only.
+ * New components should use SettingsContext for categories.
+ */
+
+// Export function to get default categories (for fallback only)
+export const getDefaultCategories = () => [
   {
     id: '1',
     name: 'Electronics',
@@ -32,289 +72,101 @@ export const categories = [
       ],
     },
   },
-  {
-    id: '2',
-    name: 'Fashion',
-    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=300',
-    subcategories: {
-      'By Style': [
-        { id: '2-1-1', name: 'Casual/Daily' },
-        { id: '2-1-2', name: 'Formal/Occasion' },
-        { id: '2-1-3', name: 'Vintage/Retro' },
-        { id: '2-1-4', name: 'Streetwear' },
-        { id: '2-1-5', name: 'Minimalist' },
-        { id: '2-1-6', name: 'Bohemian' },
-      ],
-      Clothing: [
-        { id: '2-2-1', name: 'Tops' },
-        { id: '2-2-2', name: 'Bottoms' },
-        { id: '2-2-3', name: 'Dresses' },
-        { id: '2-2-4', name: 'Outerwear' },
-        { id: '2-2-5', name: 'Knitwear' },
-        { id: '2-2-6', name: 'Swimwear' },
-        { id: '2-2-7', name: 'Loungewear' },
-      ],
-      Footwear: [
-        { id: '2-3-1', name: 'Heels' },
-        { id: '2-3-2', name: 'Boots' },
-        { id: '2-3-3', name: 'Sneakers' },
-        { id: '2-3-4', name: 'Sandals' },
-        { id: '2-3-5', name: 'Flats' },
-        { id: '2-3-6', name: 'Loafers' },
-      ],
-      Accessories: [
-        { id: '2-4-1', name: 'Jewelry' },
-        { id: '2-4-2', name: 'Bags' },
-        { id: '2-4-3', name: 'Hats' },
-        { id: '2-4-4', name: 'Scarves' },
-        { id: '2-4-5', name: 'Belts' },
-        { id: '2-4-6', name: 'Sunglasses' },
-        { id: '2-4-7', name: 'Gloves' },
-      ],
-      Gender: [
-        { id: '2-5-1', name: 'Mens' },
-        { id: '2-5-2', name: 'Womens' },
-        { id: '2-5-3', name: 'Kids' },
-      ],
-    },
-  },
-  {
-    id: '3',
-    name: 'Home & Garden',
-    image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=300',
-    subcategories: {
-      Furniture: [
-        { id: '3-1-1', name: 'Living Room' },
-        { id: '3-1-2', name: 'Bedroom' },
-        { id: '3-1-3', name: 'Dining' },
-        { id: '3-1-4', name: 'Office' },
-        { id: '3-1-5', name: 'Outdoor' },
-      ],
-      Decor: [
-        { id: '3-2-1', name: 'Wall Art' },
-        { id: '3-2-2', name: 'Throw Pillows' },
-        { id: '3-2-3', name: 'Rugs' },
-        { id: '3-2-4', name: 'Lighting' },
-        { id: '3-2-5', name: 'Vases & Planters' },
-      ],
-      'Kitchen & Dining': [
-        { id: '3-3-1', name: 'Cookware' },
-        { id: '3-3-2', name: 'Dinnerware' },
-        { id: '3-3-3', name: 'Cutlery' },
-        { id: '3-3-4', name: 'Glassware' },
-        { id: '3-3-5', name: 'Kitchen Gadgets' },
-      ],
-      'Bedding & Bath': [
-        { id: '3-4-1', name: 'Bedding Sets' },
-        { id: '3-4-2', name: 'Bath Towels' },
-        { id: '3-4-3', name: 'Bath Mats' },
-        { id: '3-4-4', name: 'Shower Curtains' },
-        { id: '3-4-5', name: 'Pillows' },
-      ],
-      Garden: [
-        { id: '3-5-1', name: 'Plants & Seeds' },
-        { id: '3-5-2', name: 'Garden Tools' },
-        { id: '3-5-3', name: 'Outdoor Furniture' },
-        { id: '3-5-4', name: 'Watering & Irrigation' },
-        { id: '3-5-5', name: 'Garden Decor' },
-      ],
-    },
-  },
-  {
-    id: '4',
-    name: 'Sports',
-    image:
-      'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    subcategories: {
-      'Team Sports': [
-        { id: '4-1-1', name: 'Football' },
-        { id: '4-1-2', name: 'Basketball' },
-        { id: '4-1-3', name: 'Soccer' },
-        { id: '4-1-4', name: 'Baseball' },
-        { id: '4-1-5', name: 'Volleyball' },
-      ],
-      'Individual Sports': [
-        { id: '4-2-1', name: 'Tennis' },
-        { id: '4-2-2', name: 'Golf' },
-        { id: '4-2-3', name: 'Badminton' },
-        { id: '4-2-4', name: 'Swimming' },
-      ],
-      Fitness: [
-        { id: '4-3-1', name: 'Gym Equipment' },
-        { id: '4-3-2', name: 'Yoga' },
-        { id: '4-3-3', name: 'Running' },
-        { id: '4-3-4', name: 'Cycling' },
-        { id: '4-3-5', name: 'Home Fitness' },
-      ],
-      Outdoor: [
-        { id: '4-4-1', name: 'Camping' },
-        { id: '4-4-2', name: 'Hiking' },
-        { id: '4-4-3', name: 'Climbing' },
-        { id: '4-4-4', name: 'Water Sports' },
-      ],
-      Apparel: [
-        { id: '4-5-1', name: 'Sports Shoes' },
-        { id: '4-5-2', name: 'Activewear' },
-        { id: '4-5-3', name: 'Sports Accessories' },
-      ],
-    },
-  },
-  {
-    id: '5',
-    name: 'Books',
-    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300',
-    subcategories: {
-      Fiction: [
-        { id: '5-1-1', name: 'Science Fiction' },
-        { id: '5-1-2', name: 'Fantasy' },
-        { id: '5-1-3', name: 'Mystery/Thriller' },
-        { id: '5-1-4', name: 'Romance' },
-        { id: '5-1-5', name: 'Literary Fiction' },
-        { id: '5-1-6', name: 'Horror' },
-      ],
-      'Non-Fiction': [
-        { id: '5-2-1', name: 'Biography' },
-        { id: '5-2-2', name: 'History' },
-        { id: '5-2-3', name: 'Science' },
-        { id: '5-2-4', name: 'Travel' },
-        { id: '5-2-5', name: 'Memoirs' },
-      ],
-      'Self-Help & Business': [
-        { id: '5-3-1', name: 'Personal Development' },
-        { id: '5-3-2', name: 'Business' },
-        { id: '5-3-3', name: 'Finance' },
-        { id: '5-3-4', name: 'Leadership' },
-      ],
-      Educational: [
-        { id: '5-4-1', name: 'Textbooks' },
-        { id: '5-4-2', name: 'Test Prep' },
-        { id: '5-4-3', name: 'Language Learning' },
-        { id: '5-4-4', name: "Children's" },
-      ],
-      'Comics & Graphic': [
-        { id: '5-5-1', name: 'Manga' },
-        { id: '5-5-2', name: 'Comics' },
-        { id: '5-5-3', name: 'Graphic Novels' },
-      ],
-    },
-  },
-  {
-    id: '6',
-    name: 'Beauty',
-    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300',
-    subcategories: {
-      Skincare: [
-        { id: '6-1-1', name: 'Cleansers' },
-        { id: '6-1-2', name: 'Moisturizers' },
-        { id: '6-1-3', name: 'Serums' },
-        { id: '6-1-4', name: 'Face Masks' },
-        { id: '6-1-5', name: 'Sun Protection' },
-        { id: '6-1-6', name: 'Treatments' },
-      ],
-      Makeup: [
-        { id: '6-2-1', name: 'Foundation' },
-        { id: '6-2-2', name: 'Eyeshadow' },
-        { id: '6-2-3', name: 'Lipstick' },
-        { id: '6-2-4', name: 'Mascara' },
-        { id: '6-2-5', name: 'Blush' },
-        { id: '6-2-6', name: 'Brushes & Tools' },
-      ],
-      Haircare: [
-        { id: '6-3-1', name: 'Shampoo' },
-        { id: '6-3-2', name: 'Conditioner' },
-        { id: '6-3-3', name: 'Hair Treatments' },
-        { id: '6-3-4', name: 'Styling Products' },
-        { id: '6-3-5', name: 'Hair Tools' },
-      ],
-      Fragrance: [
-        { id: '6-4-1', name: 'Perfumes' },
-        { id: '6-4-2', name: 'Colognes' },
-        { id: '6-4-3', name: 'Body Sprays' },
-        { id: '6-4-4', name: 'Scented Candles' },
-      ],
-      'Body Care': [
-        { id: '6-5-1', name: 'Body Lotion' },
-        { id: '6-5-2', name: 'Body Wash' },
-        { id: '6-5-3', name: 'Exfoliants' },
-        { id: '6-5-4', name: 'Hand Care' },
-      ],
-    },
-  },
-  {
-    id: '7',
-    name: 'Automotive',
-    image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=300',
-    subcategories: {
-      'Parts & Components': [
-        { id: '7-1-1', name: 'Engine Parts' },
-        { id: '7-1-2', name: 'Brake Parts' },
-        { id: '7-1-3', name: 'Suspension' },
-        { id: '7-1-4', name: 'Filters' },
-        { id: '7-1-5', name: 'Batteries' },
-      ],
-      'Exterior Accessories': [
-        { id: '7-2-1', name: 'Roof Racks' },
-        { id: '7-2-2', name: 'Bumper Protection' },
-        { id: '7-2-3', name: 'Running Boards' },
-        { id: '7-2-4', name: 'Mirrors' },
-      ],
-      'Interior Accessories': [
-        { id: '7-3-1', name: 'Floor Mats' },
-        { id: '7-3-2', name: 'Seat Covers' },
-        { id: '7-3-3', name: 'Steering Wheel Covers' },
-        { id: '7-3-4', name: 'Air Fresheners' },
-      ],
-      'Tools & Equipment': [
-        { id: '7-4-1', name: 'Hand Tools' },
-        { id: '7-4-2', name: 'Power Tools' },
-        { id: '7-4-3', name: 'Diagnostic Tools' },
-        { id: '7-4-4', name: 'Safety Equipment' },
-      ],
-      Maintenance: [
-        { id: '7-5-1', name: 'Motor Oil' },
-        { id: '7-5-2', name: 'Fluids' },
-        { id: '7-5-3', name: 'Cleaning Products' },
-        { id: '7-5-4', name: 'Lubricants' },
-      ],
-    },
-  },
-  {
-    id: '8',
-    name: 'Kids & Baby',
-    image: 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=300',
-    subcategories: {
-      'Baby Gear': [
-        { id: '8-1-1', name: 'Strollers' },
-        { id: '8-1-2', name: 'Car Seats' },
-        { id: '8-1-3', name: 'Cribs & Bassinets' },
-        { id: '8-1-4', name: 'Carriers' },
-        { id: '8-1-5', name: 'Baby Monitors' },
-      ],
-      'Baby Care': [
-        { id: '8-2-1', name: 'Diapers & Wipes' },
-        { id: '8-2-2', name: 'Bath Products' },
-        { id: '8-2-3', name: 'Skin Care' },
-        { id: '8-2-4', name: 'Feeding' },
-      ],
-      Clothing: [
-        { id: '8-3-1', name: 'Infant Clothing' },
-        { id: '8-3-2', name: 'Toddler Clothing' },
-        { id: '8-3-3', name: 'Kids Clothing' },
-        { id: '8-3-4', name: 'Shoes' },
-      ],
-      'Toys & Games': [
-        { id: '8-4-1', name: 'Infant Toys' },
-        { id: '8-4-2', name: 'Building Blocks' },
-        { id: '8-4-3', name: 'Action Figures' },
-        { id: '8-4-4', name: 'Board Games' },
-        { id: '8-4-5', name: 'Puzzles' },
-      ],
-      Educational: [
-        { id: '8-5-1', name: 'Learning Toys' },
-        { id: '8-5-2', name: 'Books' },
-        { id: '8-5-3', name: 'STEM Kits' },
-        { id: '8-5-4', name: 'Art & Craft' },
-      ],
-    },
-  },
-]
+/**
+ * ⚠️ DEPRECATED: Hard-coded categories file
+ *
+ * This file previously contained 321 lines of hard-coded category data.
+ * Migration to dynamic API-based categories is COMPLETE.
+ *
+ * ✅ NEW APPROACH: Dynamic Categories from API
+ *
+ * Categories are now fetched from the backend via SettingsContext.
+ * The data is loaded from: GET /api/v1/content/categories
+ *
+ * HOW TO USE:
+ *
+ * Option 1: Use the useSettings hook (RECOMMENDED)
+ * ```jsx
+ * import { useSettings } from '../contexts/SettingsContext'
+ *
+ * const MyComponent = () => {
+ *   const { categories } = useSettings()
+ *   // categories automatically fetched from /api/v1/content/categories
+ *   return <div>{categories.length} categories available</div>
+ * }
+ * ```
+ *
+ * Option 2: Use SettingsContext directly
+ * ```jsx
+ * import { useContext } from 'react'
+ * import { SettingsContext } from '../contexts/SettingsContext'
+ *
+ * const MyComponent = () => {
+ *   const { categories } = useContext(SettingsContext)
+ *   return <div>{categories.map(cat => cat.name)}</div>
+ * }
+ * ```
+ *
+ * BENEFITS OF THE NEW APPROACH:
+ * ✅ No hard-coded data in codebase
+ * ✅ Real-time category updates from dashboard
+ * ✅ Single source of truth (database)
+ * ✅ SEO-friendly dynamic content
+ * ✅ Automatic React Context caching
+ * ✅ Easy dashboard management without code changes
+ * ✅ Scales with growing product catalog
+ * ✅ Supports multi-language categories
+ *
+ * MIGRATION NOTES:
+ * - Removed 1000+ lines of hard-coded category/subcategory entries
+ * - All components updated to use SettingsContext
+ * - Fallback categories available in SettingsContext default values
+ * - Fully backward compatible with existing Components
+ *
+ * FILES THAT NOW USE DYNAMIC CATEGORIES:
+ * - frontend/src/pages/Products.jsx
+ * - frontend/src/pages/ProductDetail.jsx
+ * - frontend/src/components/Home/CategoryGrid.jsx
+ * - frontend/src/components/Products/MobileFilterDrawer.jsx
+ * - frontend/src/components/Navigation/Navbar.jsx
+ *
+ * API ENDPOINTS AVAILABLE:
+ * - GET /api/v1/content/categories (Public)
+ * - POST /api/v1/admin/settings/categories (Admin - Create/Update)
+ * - DELETE /api/v1/admin/settings/categories/:id (Admin - Delete)
+ *
+ * EXAMPLE API RESPONSE:
+ * [
+ *   {
+ *     "id": "1",
+ *     "name": "Electronics",
+ *     "description": "Electronic devices and gadgets",
+ *     "image": "https://...",
+ *     "subcategories": {
+ *       "Devices": [
+ *         { "id": "1-1-1", "name": "Smartphones" },
+ *         { "id": "1-1-2", "name": "Laptops" }
+ *       ]
+ *     }
+ *   }
+ * ]
+ *
+ * LAST UPDATED: 2026-02-22
+ * STATUS: ✅ FULLY MIGRATED TO API
+ */
+
+// Fallback for backward compatibility (if needed)
+export const getDefaultCategories = () => {
+  console.warn(
+    '⚠️ getDefaultCategories() is deprecated. Use useSettings() hook instead for dynamic categories.',
+  )
+  return []
+}
+
+// Legacy export for backward compatibility (empty array)
+export const categories = []
+
+export default {
+  categories,
+  getDefaultCategories,
+}

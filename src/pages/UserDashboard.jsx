@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './UserDashboard.css'
 
 /**
@@ -7,27 +7,54 @@ import './UserDashboard.css'
  */
 const UserDashboard = ({ user = {} }) => {
   const [activeTab, setActiveTab] = useState('orders')
-  const [orders, setOrders] = useState([
-    {
-      id: 1001,
-      date: '2026-02-15',
-      total: 129.99,
-      status: 'delivered',
-      items: ['Product 1', 'Product 2'],
-    },
-    {
-      id: 1002,
-      date: '2026-02-10',
-      total: 89.99,
-      status: 'shipped',
-      items: ['Product 3'],
-    },
-  ])
+  const [orders, setOrders] = useState([])
+  const [wishlist, setWishlist] = useState([])
+  const [loadingOrders, setLoadingOrders] = useState(true)
+  const [loadingWishlist, setLoadingWishlist] = useState(true)
+  const [errorOrders, setErrorOrders] = useState(null)
+  const [errorWishlist, setErrorWishlist] = useState(null)
 
-  const [wishlist, setWishlist] = useState([
-    { id: 1, name: 'Product 1', price: 49.99, inStock: true },
-    { id: 2, name: 'Product 2', price: 79.99, inStock: true },
-  ])
+  // Fetch orders on component mount
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoadingOrders(true)
+        const response = await fetch('/api/v1/customer/orders')
+        if (!response.ok) throw new Error('Failed to fetch orders')
+        const data = await response.json()
+        setOrders(data.orders || data || [])
+        setErrorOrders(null)
+      } catch (err) {
+        console.error('Error fetching orders:', err)
+        setErrorOrders(err.message)
+        setOrders([])
+      } finally {
+        setLoadingOrders(false)
+      }
+    }
+    fetchOrders()
+  }, [])
+
+  // Fetch wishlist on component mount
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        setLoadingWishlist(true)
+        const response = await fetch('/api/v1/wishlist')
+        if (!response.ok) throw new Error('Failed to fetch wishlist')
+        const data = await response.json()
+        setWishlist(data.wishlist || data || [])
+        setErrorWishlist(null)
+      } catch (err) {
+        console.error('Error fetching wishlist:', err)
+        setErrorWishlist(err.message)
+        setWishlist([])
+      } finally {
+        setLoadingWishlist(false)
+      }
+    }
+    fetchWishlist()
+  }, [])
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -93,7 +120,14 @@ const UserDashboard = ({ user = {} }) => {
           {activeTab === 'orders' && (
             <div className="orders-tab">
               <h2>Order History</h2>
-              {orders.length > 0 ? (
+              {errorOrders && (
+                <p style={{ color: 'red', marginBottom: '1rem' }}>
+                  Error loading orders: {errorOrders}
+                </p>
+              )}
+              {loadingOrders ? (
+                <p>Loading your orders...</p>
+              ) : orders.length > 0 ? (
                 <div className="orders-list">
                   {orders.map((order) => (
                     <div key={order.id} className="order-card">
@@ -135,7 +169,14 @@ const UserDashboard = ({ user = {} }) => {
           {activeTab === 'wishlist' && (
             <div className="wishlist-tab">
               <h2>My Wishlist</h2>
-              {wishlist.length > 0 ? (
+              {errorWishlist && (
+                <p style={{ color: 'red', marginBottom: '1rem' }}>
+                  Error loading wishlist: {errorWishlist}
+                </p>
+              )}
+              {loadingWishlist ? (
+                <p>Loading your wishlist...</p>
+              ) : wishlist.length > 0 ? (
                 <div className="wishlist-grid">
                   {wishlist.map((item) => (
                     <div key={item.id} className="wishlist-item">

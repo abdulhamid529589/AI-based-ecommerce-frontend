@@ -1,5 +1,5 @@
 import React from 'react'
-import PremiumHero from '../components/Home/PremiumHero'
+import MobileHeroSlider from '../components/Home/MobileHeroSlider'
 import CategoryGrid from '../components/Home/CategoryGrid'
 import ProductSlider from '../components/Home/ProductSlider'
 import FeatureSection from '../components/Home/FeatureSection'
@@ -11,7 +11,8 @@ const Index = () => {
   const { topRatedProducts, newProducts } = useSelector((state) => state.product, shallowEqual)
   return (
     <div className="min-h-screen bg-background">
-      <PremiumHero />
+      {/* Amazing hero slider for all devices (mobile, tablet, desktop) */}
+      <MobileHeroSlider />
       <div className="w-full">
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 pt-4 sm:pt-6 md:pt-8 lg:pt-12 mx-auto max-w-7xl">
           <CategoryGrid />

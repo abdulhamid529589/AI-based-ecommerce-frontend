@@ -1,0 +1,370 @@
+/**
+ * PREMIUM HERO STYLES - AMAZON-STYLE E-COMMERCE SLIDER
+ * Professional responsive design for mobile, tablet, and desktop
+ * Touch-friendly, accessibility-focused, performance-optimized
+ */
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+.premium-hero {
+  perspective: 1200px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 450px;
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes blob {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   BLOB ANIMATIONS
+   ============================================ */
+
+.animate-blob {
+  animation: blob 7s infinite;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+/* ============================================
+   TEXT ANIMATIONS
+   ============================================ */
+
+.hero-title {
+  animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.8) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hero-subtitle {
+  animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+  opacity: 0;
+}
+
+.premium-hero-content {
+  animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+
+.premium-hero button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow, background-color;
+  contain: layout style paint;
+}
+
+.premium-hero button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.premium-hero button:hover::after {
+  opacity: 1;
+}
+
+.premium-hero button:active {
+  transform: scale(0.98);
+}
+
+/* ============================================
+   SLIDE INDICATOR STYLES
+   ============================================ */
+
+.premium-hero [class*='rounded-full'] {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================ */
+
+/* Extra Small Phones (320px - 480px) */
+@media (max-width: 480px) {
+  .premium-hero {
+    min-height: 450px;
+  }
+
+  .premium-hero-content {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+    line-height: 1.3;
+  }
+
+  .hero-subtitle {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .animate-blob {
+    width: 256px !important;
+    height: 256px !important;
+    filter: blur(40px) !important;
+  }
+
+  .premium-hero-content {
+    text-align: center;
+  }
+}
+
+/* Small Phones (481px - 640px) */
+@media (min-width: 481px) and (max-width: 640px) {
+  .premium-hero {
+    min-height: 480px;
+  }
+
+  .hero-title {
+    font-size: 1.875rem;
+    line-height: 1.3;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .animate-blob {
+    width: 300px !important;
+    height: 300px !important;
+  }
+
+  .premium-hero-content {
+    text-align: center;
+  }
+}
+
+/* Tablets (641px - 1024px) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .premium-hero {
+    min-height: 500px;
+  }
+
+  .premium-hero-content {
+    padding: 2rem 2.5rem;
+  }
+
+  .hero-title {
+    font-size: 2.75rem;
+    line-height: 1.3;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .animate-blob {
+    width: 400px !important;
+    height: 400px !important;
+  }
+
+  .premium-hero-content {
+    text-align: center;
+  }
+}
+
+/* Desktops (1025px and above) */
+@media (min-width: 1025px) {
+  .premium-hero {
+    min-height: 600px;
+  }
+
+  .premium-hero-content {
+    padding: 2rem 3rem;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+    line-height: 1.2;
+  }
+
+  .hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .animate-blob {
+    width: 400px !important;
+    height: 400px !important;
+  }
+
+  .premium-hero-content {
+    text-align: left;
+  }
+}
+
+/* Large Desktops (1280px and above) */
+@media (min-width: 1280px) {
+  .premium-hero {
+    min-height: 650px;
+  }
+
+  .hero-title {
+    font-size: 3.75rem;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: 1.35rem;
+    line-height: 1.5;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY FEATURES
+   ============================================ */
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .premium-hero h1 {
+    text-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .premium-hero,
+  .premium-hero * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High Contrast Support */
+@media (prefers-contrast: more) {
+  .premium-hero h1 {
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  }
+
+  .premium-hero button {
+    border: 2px solid white;
+  }
+}
+
+/* ============================================
+   TOUCH DEVICE OPTIMIZATIONS
+   ============================================ */
+
+@media (hover: none) and (pointer: coarse) {
+  .premium-hero button {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    min-height: 44px;
+  }
+
+  .premium-hero button:hover::after {
+    display: none;
+  }
+
+  .premium-hero button:active {
+    transform: scale(0.95);
+  }
+}
+
+/* ============================================
+   HIGH DPI DISPLAY SUPPORT
+   ============================================ */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .premium-hero .animate-blob {
+    filter: blur(60px);
+  }
+}
+
+/* ============================================
+   LANDSCAPE ORIENTATION
+   ============================================ */
+
+@media (max-height: 600px) and (orientation: landscape) {
+  .premium-hero {
+    min-height: auto;
+  }
+
+  .premium-hero-content {
+    padding: 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.875rem;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .premium-hero {
+    display: none;
+  }
+}

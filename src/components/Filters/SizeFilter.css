@@ -1,0 +1,91 @@
+/* Size Filter Styling */
+
+.size-filter {
+  /* Base styles inherited from filter-section */
+}
+
+.size-category {
+  margin-bottom: 16px;
+}
+
+.size-category:last-of-type {
+  margin-bottom: 0;
+}
+
+.size-category-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 10px 0;
+}
+
+.size-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.size-button {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.size-label {
+  width: 100%;
+  padding: 10px 8px;
+  border: 2px solid #e5e7eb;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.size-label:hover {
+  border-color: #3b82f6;
+  background-color: #eff6ff;
+  color: #1e40af;
+}
+
+.size-label.selected {
+  background-color: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.size-count {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.filter-divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 12px 0;
+}
+
+@media (max-width: 768px) {
+  .size-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .size-label {
+    padding: 8px 6px;
+    font-size: 12px;
+  }
+
+  .size-count {
+    font-size: 10px;
+  }
+}

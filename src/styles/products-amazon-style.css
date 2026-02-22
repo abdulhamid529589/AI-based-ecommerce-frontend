@@ -1,0 +1,299 @@
+/* Amazon Style Products Page */
+
+.products-amazon-style {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.products-amazon-style .product-card-amazon {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.products-amazon-style .product-card-amazon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.products-amazon-style .product-card-amazon img {
+  transition: transform 0.3s ease;
+}
+
+.products-amazon-style .product-card-amazon:hover img {
+  transform: scale(1.05);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .products-amazon-style {
+    padding-top: 60px;
+  }
+
+  .products-amazon-style > div:first-child {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+  }
+
+  .products-amazon-style .grid {
+    margin-top: 80px;
+  }
+
+  .products-amazon-style .md\:col-span-1 {
+    position: fixed;
+    left: -300px;
+    width: 280px;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+    background: white;
+    z-index: 30;
+    padding: 16px;
+    border-right: 1px solid #e5e7eb;
+    transition: left 0.3s ease;
+  }
+
+  .products-amazon-style .md\:col-span-1.active {
+    left: 0;
+  }
+
+  .products-amazon-style .md\:col-span-4 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .products-amazon-style .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+  }
+
+  .products-amazon-style .product-card-amazon {
+    flex-direction: column !important;
+  }
+
+  .products-amazon-style .product-card-amazon > div:first-child {
+    width: 100% !important;
+    height: 200px !important;
+  }
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .products-amazon-style .product-card-amazon {
+    border-color: #374151;
+    background-color: #1f2937;
+  }
+
+  .products-amazon-style .product-card-amazon:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Product Card Grid Responsive */
+.products-amazon-style .grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.products-amazon-style .sm\:grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.products-amazon-style .lg\:grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .products-amazon-style .lg\:grid-cols-4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .products-amazon-style .sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .products-amazon-style .sm\:grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+}
+
+/* Filters Styling */
+.products-amazon-style .border {
+  border-color: #d1d5db;
+}
+
+.products-amazon-style .dark\:border-gray-600 {
+  border-color: #4b5563;
+}
+
+.products-amazon-style button:hover,
+.products-amazon-style .hover\:bg-gray-50:hover {
+  background-color: #f9fafb;
+}
+
+.products-amazon-style .dark\:hover\:bg-gray-700:hover {
+  background-color: #374151;
+}
+
+/* Sticky Top Bar */
+.products-amazon-style .sticky {
+  top: 80px;
+  z-index: 20;
+}
+
+/* Pagination */
+.products-amazon-style .pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.products-amazon-style .pagination button {
+  min-width: 40px;
+  height: 40px;
+  padding: 8px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.products-amazon-style .pagination button:hover:not(:disabled) {
+  border-color: #ff9900;
+  color: #ff9900;
+}
+
+.products-amazon-style .pagination button.active {
+  background-color: #ff9900;
+  color: white;
+  border-color: #ff9900;
+}
+
+/* Loading Spinner */
+.products-amazon-style .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty State */
+.products-amazon-style .h-96 {
+  min-height: 384px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rating Stars */
+.products-amazon-style .fill-yellow-400 {
+  fill: #fbbf24;
+}
+
+.products-amazon-style .text-yellow-400 {
+  color: #fbbf24;
+}
+
+/* Orange Button (Amazon Color) */
+.products-amazon-style .bg-orange-500 {
+  background-color: #ff9900;
+}
+
+.products-amazon-style .hover\:bg-orange-600:hover {
+  background-color: #e68700;
+}
+
+.products-amazon-style .text-orange-500 {
+  color: #ff9900;
+}
+
+/* Scrollbar Styling */
+.products-amazon-style::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.products-amazon-style::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.products-amazon-style::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.products-amazon-style::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.products-amazon-style .dark\:bg-gray-900::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+.products-amazon-style .dark\:bg-gray-900::-webkit-scrollbar-thumb {
+  background: #6b7280;
+}
+
+/* Filter Label Active State */
+.products-amazon-style input[type='radio']:checked + span,
+.products-amazon-style input[type='checkbox']:checked + span {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.products-amazon-style .dark\:text-white input[type='checkbox']:checked + span {
+  color: #f3f4f6;
+}
+
+/* View Mode Buttons */
+.products-amazon-style .view-toggle-btn {
+  transition: all 0.2s ease;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.products-amazon-style .view-toggle-btn.active {
+  background-color: #ff9900;
+  color: white;
+}
+
+/* Product Card List View */
+.products-amazon-style .product-card-amazon.flex {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.products-amazon-style .product-card-amazon.flex > div:first-child {
+  flex-shrink: 0;
+  width: 160px;
+  height: 160px;
+}
+
+/* Accessibility */
+.products-amazon-style button:focus,
+.products-amazon-style input:focus,
+.products-amazon-style select:focus {
+  outline: 2px solid #ff9900;
+  outline-offset: 2px;
+}
+
+/* Performance */
+.products-amazon-style .product-card-amazon {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .products-amazon-style .product-card-amazon,
+  .products-amazon-style .product-card-amazon img,
+  .products-amazon-style button {
+    transition: none;
+    animation: none;
+  }
+}

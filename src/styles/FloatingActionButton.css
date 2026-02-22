@@ -1,0 +1,251 @@
+/* Floating Action Button Styles */
+
+.fab-backdrop {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 39;
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 6rem;
+  right: 1.5rem;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+@media (max-width: 640px) {
+  .fab-container {
+    bottom: 5.5rem;
+    right: 1rem;
+  }
+}
+
+/* FAB Menu */
+.fab-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.fab-menu.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* FAB Items */
+.fab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: #111827;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  padding: 0 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fab-item {
+    background: #1f2937;
+    color: #f9fafb;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+  }
+}
+
+.fab-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+}
+
+.fab-item:active {
+  transform: scale(0.95);
+}
+
+.fab-item.scroll-to-top {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+}
+
+.fab-item.quick-checkout {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.fab-label {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .fab-item {
+    width: auto;
+    padding: 0.75rem 1rem;
+  }
+
+  .fab-label {
+    display: inline;
+  }
+}
+
+/* Main FAB Button */
+.fab-main {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  font-size: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fab-main {
+    box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+  }
+}
+
+.fab-main:hover {
+  transform: scale(1.1) translateY(-4px);
+  box-shadow: 0 12px 28px rgba(59, 130, 246, 0.5);
+}
+
+.fab-main:active {
+  transform: scale(0.95);
+}
+
+/* When cart has items */
+.fab-main.has-items {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* FAB Badge - Cart Counter */
+.fab-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+  animation: badgeBounce 0.5s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fab-badge {
+    border-color: #111827;
+  }
+}
+
+@keyframes badgeBounce {
+  0% {
+    transform: scale(0.3);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .fab-main {
+    width: 56px;
+    height: 56px;
+  }
+
+  .fab-item {
+    width: 44px;
+    height: 44px;
+    font-size: 0.7rem;
+  }
+
+  .fab-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .fab-main,
+  .fab-item,
+  .fab-menu,
+  .fab-badge {
+    animation: none;
+    transition: none;
+  }
+}
+
+.fab-main:focus-visible,
+.fab-item:focus-visible {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fab-main:focus-visible,
+  .fab-item:focus-visible {
+    outline-color: #0284c7;
+  }
+}

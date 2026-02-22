@@ -1,0 +1,54 @@
+/* Material Filter Styling */
+
+.material-filter {
+  /* Base styles inherited from filter-section */
+}
+
+.material-filter .filter-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.material-filter .filter-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.material-filter .filter-option:hover:not(.filter-option--disabled) {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  padding-left: 5px;
+}
+
+.material-filter .filter-divider {
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 8px 0;
+}
+
+.material-filter .filter-option--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.material-filter .filter-option--disabled:hover {
+  background-color: transparent;
+  border-left: none;
+  padding-left: 8px;
+}
+
+@media (max-width: 768px) {
+  .material-filter .filter-option {
+    padding: 6px;
+  }
+
+  .material-filter .filter-option:hover:not(.filter-option--disabled) {
+    padding-left: 6px;
+  }
+}

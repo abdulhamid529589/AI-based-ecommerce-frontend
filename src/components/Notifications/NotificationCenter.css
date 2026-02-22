@@ -1,0 +1,474 @@
+/* ============================================
+   NOTIFICATION CENTER STYLES
+   Toast notifications with smooth animations
+   ============================================ */
+
+/* Notification Bell */
+.notification-bell-container {
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-size: 1rem;
+  transition: transform 0.2s ease;
+}
+
+.notification-bell:hover {
+  transform: scale(1.1);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+/* Notification Panel */
+.notification-panel {
+  position: fixed;
+  top: 60px;
+  right: 1rem;
+  width: 380px;
+  max-height: 600px;
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideIn 0.3s ease;
+}
+
+.dark .notification-panel {
+  background: #1f2937;
+  color: white;
+}
+
+.notification-panel-header {
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dark .notification-panel-header {
+  border-bottom-color: #374151;
+}
+
+.notification-panel-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mark-all-read-btn {
+  padding: 0.4rem 0.8rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.mark-all-read-btn:hover {
+  background: #2563eb;
+}
+
+.close-panel-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.notification-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: #9ca3af;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.notification-loading {
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+/* Notification Item */
+.notification-item {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  align-items: flex-start;
+}
+
+.dark .notification-item {
+  border-bottom-color: #374151;
+}
+
+.notification-item:hover {
+  background: #f9fafb;
+}
+
+.dark .notification-item:hover {
+  background: #111827;
+}
+
+.notification-item.unread {
+  background: #f0f9ff;
+}
+
+.dark .notification-item.unread {
+  background: #0c2340;
+}
+
+.notification-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.notification-item.order .notification-icon {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.notification-item.promotion .notification-icon {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.notification-item.warning .notification-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-content h4 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.dark .notification-content h4 {
+  color: #f3f4f6;
+}
+
+.notification-content p {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  word-break: break-word;
+}
+
+.dark .notification-content p {
+  color: #d1d5db;
+}
+
+.notification-time {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.notification-delete {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.notification-delete:hover {
+  color: #ef4444;
+}
+
+.notification-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+/* Individual Toast Container */
+.toast-notification {
+  animation:
+    slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    slideOut 0.3s cubic-bezier(0.4, 0, 0.2, 1) reverse paused;
+  animation-fill-mode: forwards;
+}
+
+.toast-notification.animating-out {
+  animation-name: slideOut;
+  animation-duration: 0.3s;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(400px) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(400px) translateY(-20px);
+  }
+}
+
+/* Animate Slide In Class */
+.animate-slide-in {
+  animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Toast Type Specific Styles */
+.toast-notification.success {
+  --toast-bg: rgb(34, 197, 94);
+  --toast-dark-bg: rgb(21, 128, 61);
+  --toast-shadow: 0 4px 20px rgba(34, 197, 94, 0.25);
+}
+
+.toast-notification.error {
+  --toast-bg: rgb(239, 68, 68);
+  --toast-dark-bg: rgb(220, 38, 38);
+  --toast-shadow: 0 4px 20px rgba(239, 68, 68, 0.25);
+}
+
+.toast-notification.warning {
+  --toast-bg: rgb(249, 115, 22);
+  --toast-dark-bg: rgb(234, 88, 12);
+  --toast-shadow: 0 4px 20px rgba(249, 115, 22, 0.25);
+}
+
+.toast-notification.info {
+  --toast-bg: rgb(59, 130, 246);
+  --toast-dark-bg: rgb(37, 99, 235);
+  --toast-shadow: 0 4px 20px rgba(59, 130, 246, 0.25);
+}
+
+/* Icon Animation */
+.toast-notification svg {
+  animation: iconBounce 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes iconBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-45deg);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* Toast Hover Effect */
+.toast-notification {
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-notification:hover {
+  transform: translateY(-4px);
+}
+
+/* Progress Bar for Auto-Dismiss */
+.toast-notification::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: currentColor;
+  border-radius: 0 0 0.75rem 0;
+  opacity: 0.5;
+  animation: progressBar 4s linear forwards;
+}
+
+@keyframes progressBar {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+/* Close Button Styles */
+.toast-notification button {
+  will-change: transform, background-color;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast-notification button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1) rotate(90deg);
+}
+
+.toast-notification button:active {
+  transform: scale(0.95) rotate(90deg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .notification-container {
+    right: 1rem;
+    left: 1rem;
+    align-items: stretch;
+  }
+
+  .toast-notification {
+    width: 100%;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-100%) translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(-100%) translateY(-20px);
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .notification-container {
+    right: 0.5rem;
+    left: 0.5rem;
+    top: 0.5rem;
+  }
+
+  .toast-notification {
+    font-size: 0.875rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .toast-notification,
+  .toast-notification button,
+  .toast-notification svg {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .toast-notification::after {
+    animation: none !important;
+  }
+
+  .toast-notification:hover {
+    transform: none;
+  }
+}
+
+/* Focus States for Keyboard Navigation */
+.toast-notification button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 1px;
+}
+
+.toast-notification button:focus-visible:not(:focus-visible) {
+  outline: none;
+}
+
+/* Print Styles */
+@media print {
+  .notification-container {
+    display: none;
+  }
+}

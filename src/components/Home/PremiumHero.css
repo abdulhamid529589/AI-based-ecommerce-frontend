@@ -15,7 +15,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  min-height: 450px;
+  /* min-height removed - using Tailwind responsive classes instead */
 }
 
 /* ============================================
@@ -139,14 +139,11 @@
 
 /* ============================================
    RESPONSIVE DESIGN - MOBILE FIRST
+   HEIGHTS NOW HANDLED BY TAILWIND CLASSES IN JSX
    ============================================ */
 
 /* Extra Small Phones (320px - 480px) */
 @media (max-width: 480px) {
-  .premium-hero {
-    min-height: 450px;
-  }
-
   .premium-hero-content {
     padding: 1rem;
   }
@@ -174,10 +171,6 @@
 
 /* Small Phones (481px - 640px) */
 @media (min-width: 481px) and (max-width: 640px) {
-  .premium-hero {
-    min-height: 480px;
-  }
-
   .hero-title {
     font-size: 1.875rem;
     line-height: 1.3;
@@ -200,10 +193,6 @@
 
 /* Tablets (641px - 1024px) */
 @media (min-width: 641px) and (max-width: 1024px) {
-  .premium-hero {
-    min-height: 500px;
-  }
-
   .premium-hero-content {
     padding: 2rem 2.5rem;
   }
@@ -230,10 +219,6 @@
 
 /* Desktops (1025px and above) */
 @media (min-width: 1025px) {
-  .premium-hero {
-    min-height: 600px;
-  }
-
   .premium-hero-content {
     padding: 2rem 3rem;
   }
@@ -260,10 +245,6 @@
 
 /* Large Desktops (1280px and above) */
 @media (min-width: 1280px) {
-  .premium-hero {
-    min-height: 650px;
-  }
-
   .hero-title {
     font-size: 3.75rem;
     line-height: 1.1;

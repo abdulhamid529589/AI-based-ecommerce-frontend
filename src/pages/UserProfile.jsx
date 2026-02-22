@@ -257,7 +257,7 @@ const UserProfile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-8">
-      <div className="container mx-auto px-4 max-w-6xl">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl max-w-6xl">
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}

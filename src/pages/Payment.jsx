@@ -241,7 +241,7 @@ const Payment = () => {
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-12">
           <div className="flex flex-col items-center justify-center text-center py-12">
             <ShoppingCart className="w-20 h-20 text-gray-300 dark:text-gray-600 mb-4" />
             <h2 className="text-3xl font-bold text-foreground mb-2">Cart is Empty</h2>
@@ -262,7 +262,7 @@ const Payment = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-8">
         {/* Back Button */}
         <Link
           to="/cart"

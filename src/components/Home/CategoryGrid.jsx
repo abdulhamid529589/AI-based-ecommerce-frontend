@@ -36,18 +36,18 @@ const CategoryGrid = () => {
   const selectedCategoryData = normalizeCategory(categories.find((c) => c.id === selectedCategory))
 
   return (
-    <section className="py-8 md:py-12 lg:py-16 px-4 md:px-6 lg:px-0">
-      <div className="text-center mb-8 md:mb-12">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-3 md:mb-4">
+    <section className="py-8 sm:py-12 md:py-16 lg:py-20 px-0">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 text-center mb-8 sm:mb-10 md:mb-12 lg:mb-16 mx-auto max-w-7xl">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2 sm:mb-3 md:mb-4">
           Shop by Category
         </h2>
-        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto px-2">
+        <p className="text-xs sm:text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2 leading-relaxed">
           Discover our wide range of products across different categories
         </p>
       </div>
 
       {/* Main Categories Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4 lg:gap-6 px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl">
         {categories.map((category) => (
           <button
             key={category.id}
@@ -75,23 +75,24 @@ const CategoryGrid = () => {
 
       {/* Subcategories Modal */}
       {selectedCategoryData && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-background border border-primary/20 rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 md:p-6">
+          <div className="bg-background border border-primary/20 rounded-lg sm:rounded-xl max-w-4xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6 md:p-8">
             {/* Header */}
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-2xl md:text-3xl font-bold text-foreground">
+            <div className="flex items-center justify-between mb-4 sm:mb-6 gap-3">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex-1 line-clamp-1">
                 {selectedCategoryData.name}
               </h3>
               <button
                 onClick={() => setSelectedCategory(null)}
-                className="p-2 hover:bg-primary/10 rounded-lg transition-colors"
+                className="p-2 hover:bg-primary/10 rounded-lg transition-colors flex-shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
+                aria-label="Close modal"
               >
-                <X className="w-5 h-5 md:w-6 md:h-6 text-muted-foreground hover:text-foreground" />
+                <X className="w-5 h-5 sm:w-6 sm:h-6 text-muted-foreground hover:text-foreground" />
               </button>
             </div>
 
             {/* Subcategories Sections */}
-            <div className="space-y-4 mb-6">
+            <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
               {Object.entries(selectedCategoryData.subcategories).map(([section, items]) => (
                 <div key={section} className="border border-primary/10 rounded-lg overflow-hidden">
                   {/* Section Header */}

@@ -1,0 +1,1302 @@
+/**
+ * MOBILE-FIRST RESPONSIVE DESIGN SYSTEM
+ * Complete mobile optimization for ecommerce website
+ * Breakpoints: mobile < 480px | small-phone (480-640px) | tablet (640-1024px) | desktop (1024px+)
+ */
+
+/* ============================================
+   1. TOUCH & INTERACTION OPTIMIZATIONS
+   ============================================ */
+
+/* Touch-friendly interactions */
+button,
+a,
+input[type='button'],
+input[type='submit'],
+label {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* Disable zoom on input focus for iOS */
+input,
+textarea,
+select {
+  font-size: 16px !important;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Remove selection highlight on touch */
+*:focus {
+  outline: none;
+  -webkit-outline: none;
+}
+
+/* ============================================
+   2. VIEWPORT & SAFE AREAS
+   ============================================ */
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Support for notch/safe areas on iOS */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  .navbar {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .mobile-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
+/* ============================================
+   3. MOBILE NAVIGATION IMPROVEMENTS
+   ============================================ */
+
+/* Fixed header spacing */
+.sticky.top-0 {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  padding-top: env(safe-area-inset-top, 0);
+}
+
+/* Mobile hamburger menu */
+.mobile-menu-toggle {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile menu backdrop */
+.mobile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 30;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Slide-in menu from left */
+.mobile-menu-slide {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  max-width: 320px;
+  height: 100vh;
+  background: white;
+  dark-background: #111827;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 40;
+  overflow-y: auto;
+}
+
+.mobile-menu-slide.active {
+  left: 0;
+}
+
+/* Mobile bottom sheet for modals */
+.mobile-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  dark-background: #1f2937;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideUpIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 50;
+  padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mobile-bottom-sheet-handle {
+  width: 40px;
+  height: 4px;
+  background: #e5e7eb;
+  dark-background: #4b5563;
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+/* ============================================
+   4. PRODUCT CARDS - MOBILE FIRST
+   ============================================ */
+
+/* Responsive product grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 0;
+}
+
+@media (min-width: 480px) {
+  .product-grid {
+    gap: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Product card optimizations */
+.product-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.product-card-image {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: #f3f4f6;
+  dark-background: #374151;
+  transition: transform 0.3s ease-out;
+}
+
+/* Touch feedback on mobile */
+.product-card:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 768px) {
+  .product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .product-card:hover .product-card-image {
+    transform: scale(1.05);
+  }
+}
+
+/* Product info - compact on mobile */
+.product-info {
+  padding: 8px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 480px) {
+  .product-info {
+    padding: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-info {
+    padding: 12px;
+  }
+}
+
+.product-title {
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 600;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+@media (min-width: 480px) {
+  .product-title {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 768px) {
+  .product-title {
+    font-size: 14px;
+    line-clamp: 3;
+  }
+}
+
+/* Price section */
+.product-price {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.product-price-current {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+}
+
+@media (min-width: 480px) {
+  .product-price-current {
+    font-size: 15px;
+  }
+}
+
+.product-price-original {
+  font-size: 11px;
+  color: #9ca3af;
+  text-decoration: line-through;
+}
+
+.product-discount {
+  font-size: 10px;
+  background: #fecaca;
+  dark-background: #7f1d1d;
+  color: #991b1b;
+  dark-color: #fecaca;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Rating */
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.product-rating-stars {
+  display: flex;
+  gap: 1px;
+}
+
+.product-rating-stars svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Action buttons - mobile first */
+.product-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: auto;
+}
+
+@media (min-width: 480px) {
+  .product-actions {
+    gap: 8px;
+  }
+}
+
+.btn-add-to-cart,
+.btn-buy-now {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 11px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+@media (min-width: 480px) {
+  .btn-add-to-cart,
+  .btn-buy-now {
+    font-size: 12px;
+    padding: 10px 12px;
+    min-height: 40px;
+  }
+}
+
+.btn-add-to-cart {
+  background: #e0e7ff;
+  dark-background: #312e81;
+  color: #3730a3;
+  dark-color: #93c5fd;
+}
+
+.btn-add-to-cart:active {
+  transform: scale(0.95);
+  background: #c7d2fe;
+}
+
+.btn-buy-now {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-buy-now:active {
+  transform: scale(0.95);
+  background: #2563eb;
+}
+
+@media (min-width: 768px) {
+  .btn-add-to-cart:hover {
+    background: #c7d2fe;
+  }
+
+  .btn-buy-now:hover {
+    background: #2563eb;
+  }
+}
+
+/* ============================================
+   5. FORMS - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .form-group {
+    margin-bottom: 20px;
+  }
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+}
+
+@media (min-width: 768px) {
+  .form-label {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 12px 12px;
+  font-size: 16px;
+  border: 1.5px solid #d1d5db;
+  dark-border: #4b5563;
+  border-radius: 8px;
+  background: white;
+  dark-background: #1f2937;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@media (min-width: 768px) {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 12px 14px;
+    border: 2px solid #d1d5db;
+  }
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  dark-border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  dark-box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+@media (min-width: 768px) {
+  .form-textarea {
+    min-height: 120px;
+  }
+}
+
+/* Input group */
+.form-input-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .form-input-group {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+}
+
+.form-input-group-full {
+  grid-column: 1 / -1;
+}
+
+/* ============================================
+   6. BUTTONS - MOBILE FIRST
+   ============================================ */
+
+.btn {
+  padding: 12px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .btn {
+    padding: 12px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+.btn:active {
+  transform: scale(0.95);
+}
+
+/* Button variants */
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:active {
+  background: #2563eb;
+}
+
+@media (min-width: 768px) {
+  .btn-primary:hover {
+    background: #2563eb;
+  }
+}
+
+.btn-secondary {
+  background: #e5e7eb;
+  dark-background: #374151;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+}
+
+.btn-secondary:active {
+  background: #d1d5db;
+}
+
+@media (min-width: 768px) {
+  .btn-secondary:hover {
+    background: #d1d5db;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid #d1d5db;
+  dark-border: #4b5563;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+}
+
+.btn-outline:active {
+  background: #f9fafb;
+  dark-background: #111827;
+}
+
+@media (min-width: 768px) {
+  .btn-outline {
+    border: 2px solid #d1d5db;
+  }
+
+  .btn-outline:hover {
+    background: #f9fafb;
+    dark-background: #111827;
+  }
+}
+
+.btn-small {
+  padding: 8px 12px;
+  min-height: 36px;
+  font-size: 12px;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   7. BOTTOM NAVIGATION BAR (Mobile)
+   ============================================ */
+
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  dark-background: #1f2937;
+  border-top: 1px solid #e5e7eb;
+  dark-border: #374151;
+  z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+}
+
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  text-decoration: none;
+  color: #6b7280;
+  dark-color: #d1d5db;
+  font-size: 10px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.mobile-nav-item.active {
+  color: #3b82f6;
+  dark-color: #60a5fa;
+}
+
+.mobile-nav-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ============================================
+   8. CHECKOUT & PAYMENT - MOBILE FIRST
+   ============================================ */
+
+/* Stepper */
+.checkout-stepper {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+}
+
+.stepper-item {
+  flex: 1;
+  position: relative;
+}
+
+.stepper-item::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  right: -50%;
+  height: 2px;
+  background: #e5e7eb;
+  dark-background: #374151;
+  z-index: 0;
+}
+
+.stepper-item.active::after {
+  background: #3b82f6;
+}
+
+.stepper-item:last-child::after {
+  display: none;
+}
+
+.stepper-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  dark-background: #374151;
+  border: 2px solid #e5e7eb;
+  dark-border: #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  margin: 0 auto;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.stepper-item.active .stepper-number {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+.stepper-label {
+  font-size: 10px;
+  color: #6b7280;
+  dark-color: #d1d5db;
+  text-align: center;
+  margin-top: 6px;
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .stepper-label {
+    display: block;
+    font-size: 11px;
+  }
+}
+
+/* Payment methods */
+.payment-methods {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 480px) {
+  .payment-methods {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (min-width: 768px) {
+  .payment-methods {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+.payment-method-item {
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  dark-border: #374151;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.payment-method-item.active {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  dark-background: #1e3a8a;
+}
+
+.payment-method-item:active {
+  transform: scale(0.98);
+}
+
+.payment-method-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.payment-method-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+  margin-bottom: 4px;
+}
+
+.payment-method-desc {
+  font-size: 11px;
+  color: #6b7280;
+  dark-color: #9ca3af;
+}
+
+/* ============================================
+   9. CART & ORDER - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+/* Cart item card */
+.cart-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  dark-background: #111827;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+  .cart-item {
+    gap: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+}
+
+.cart-item-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+@media (min-width: 480px) {
+  .cart-item-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.cart-item-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #3b82f6;
+  dark-color: #60a5fa;
+  margin-bottom: 8px;
+}
+
+.cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+}
+
+.quantity-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d1d5db;
+  dark-border: #4b5563;
+  background: white;
+  dark-background: #1f2937;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.quantity-btn:active {
+  transform: scale(0.9);
+}
+
+.quantity-input {
+  width: 36px;
+  text-align: center;
+  padding: 4px;
+  border: 1px solid #d1d5db;
+  dark-border: #4b5563;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* Sticky cart summary on mobile */
+.cart-summary {
+  position: relative;
+}
+
+@media (max-height: 800px) {
+  .cart-summary {
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .cart-summary {
+    position: relative;
+  }
+}
+
+.cart-summary-card {
+  background: white;
+  dark-background: #1f2937;
+  border: 1px solid #e5e7eb;
+  dark-border: #374151;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
+
+.summary-row.total {
+  border-top: 1px solid #e5e7eb;
+  dark-border: #374151;
+  padding-top: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+/* ============================================
+   10. MODALS & OVERLAYS - MOBILE OPTIMIZATIONS
+   ============================================ */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  dark-background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end;
+  z-index: 50;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.modal-content {
+  background: white;
+  dark-background: #1f2937;
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-height: 85vh;
+  padding: 20px 16px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  animation: slideUpIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .modal-content {
+    border-radius: 12px;
+    max-width: 500px;
+    max-height: 85vh;
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  dark-border: #374151;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  dark-color: #f3f4f6;
+}
+
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b7280;
+  dark-color: #d1d5db;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:active {
+  transform: scale(0.9);
+}
+
+/* ============================================
+   11. ANIMATIONS FOR MOBILE
+   ============================================ */
+
+@keyframes slideUpIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUpIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   12. SPACING & LAYOUT UTILITIES
+   ============================================ */
+
+/* Safe padding top (for notch) */
+.pt-safe {
+  padding-top: max(1rem, env(safe-area-inset-top));
+}
+
+/* Safe padding bottom (for home indicator) */
+.pb-safe {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+/* Responsive spacing */
+.space-mobile {
+  gap: 12px;
+}
+
+@media (min-width: 480px) {
+  .space-mobile {
+    gap: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .space-mobile {
+    gap: 16px;
+  }
+}
+
+/* Content container with safe margins */
+.content-container {
+  padding: 16px;
+  max-width: 100%;
+}
+
+@media (min-width: 480px) {
+  .content-container {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .content-container {
+    padding: 24px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+}
+
+/* ============================================
+   13. RESPONSIVE TEXT & TYPOGRAPHY
+   ============================================ */
+
+/* Text sizing for mobile */
+.text-mobile-xs {
+  font-size: 11px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-xs {
+    font-size: 12px;
+  }
+}
+
+.text-mobile-sm {
+  font-size: 12px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-sm {
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-mobile-sm {
+    font-size: 14px;
+  }
+}
+
+.text-mobile-base {
+  font-size: 13px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-base {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-mobile-base {
+    font-size: 16px;
+  }
+}
+
+.text-mobile-lg {
+  font-size: 15px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-lg {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-mobile-lg {
+    font-size: 18px;
+  }
+}
+
+.text-mobile-xl {
+  font-size: 16px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-xl {
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-mobile-xl {
+    font-size: 20px;
+  }
+}
+
+.text-mobile-2xl {
+  font-size: 18px;
+}
+
+@media (min-width: 480px) {
+  .text-mobile-2xl {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .text-mobile-2xl {
+    font-size: 24px;
+  }
+}
+
+/* ============================================
+   14. SCROLLBAR IMPROVEMENTS
+   ============================================ */
+
+/* Custom scrollbar for desktop */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  dark-background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  dark-background: #4b5563;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+  dark-background: #6b7280;
+}
+
+/* ============================================
+   15. UTILITY MEDIA QUERIES
+   ============================================ */
+
+/* Hide elements on mobile */
+.hide-mobile {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .hide-mobile {
+    display: block;
+  }
+}
+
+/* Show only on mobile */
+.show-mobile {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Landscape mode adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-bottom-nav {
+    display: none;
+  }
+
+  .cart-summary {
+    position: relative;
+  }
+
+  .modal-content {
+    max-height: 90vh;
+  }
+}
+
+/* Low resolution mobile devices */
+@media (max-width: 320px) {
+  .product-grid {
+    gap: 8px;
+  }
+
+  .product-card {
+    border-radius: 6px;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    padding: 10px;
+  }
+
+  .btn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}

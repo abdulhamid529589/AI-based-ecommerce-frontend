@@ -123,7 +123,7 @@ const Orders = () => {
   if (orders.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-        <div className="container mx-auto px-4 py-12">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-12">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">My Orders</h1>
           <div className="flex flex-col items-center justify-center text-center py-12 bg-card rounded-lg">
             <Package className="w-20 h-20 text-gray-300 dark:text-gray-600 mb-4" />
@@ -146,7 +146,7 @@ const Orders = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">My Orders</h1>
 
         {/* Filter Tabs */}

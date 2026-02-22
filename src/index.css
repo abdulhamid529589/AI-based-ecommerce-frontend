@@ -2,16 +2,19 @@
 @import './styles/ultimate-responsive-framework.css';
 
 /* Premium animations library */
-@import './styles/animations.css';
+/* @import './styles/animations.css'; */
 
 /* Import responsive utilities */
-@import './styles/responsive-utilities.css';
+/* @import './styles/responsive-utilities.css'; */
 
 /* Import mobile-first optimizations */
-@import './styles/mobile-optimizations.css';
+/* @import './styles/mobile-optimizations.css'; */
 
 /* Import responsive enhancements */
-@import './styles/responsive-enhancements.css';
+/* @import './styles/responsive-enhancements.css'; */
+
+/* Mobile-first optimization system - Primary mobile UX */
+/* @import './styles/mobile-first-optimization.css'; */
 
 @tailwind base;
 @tailwind components;

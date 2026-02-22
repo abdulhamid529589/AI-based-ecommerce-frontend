@@ -59,8 +59,8 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="sticky top-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-soft transition-all duration-300">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+    <nav className="sticky top-0 z-40 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-soft transition-all duration-300">
+      <div className="w-full px-2 sm:px-3 lg:px-6">
         <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
           {/* Logo - Enhanced */}
           <Link

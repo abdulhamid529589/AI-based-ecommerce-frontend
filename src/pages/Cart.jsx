@@ -75,7 +75,7 @@ const Cart = () => {
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-        <div className="container mx-auto px-4 py-8 sm:py-12">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-8 sm:py-12">
           <div className="flex flex-col items-center justify-center text-center py-12 sm:py-16">
             <ShoppingCart className="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 dark:text-gray-600 mb-4" />
             <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -99,7 +99,7 @@ const Cart = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-8 sm:pb-12">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl">
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
           Shopping Cart
         </h1>

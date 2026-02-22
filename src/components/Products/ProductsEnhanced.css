@@ -1,9 +1,22 @@
 /* Enhanced Products Layout Styles */
 
 .products-enhanced {
-  padding: 20px 16px;
-  max-width: 1400px;
+  padding: 12px;
+  max-width: 100%;
   margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .products-enhanced {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .products-enhanced {
+    padding: 20px 16px;
+    max-width: 1400px;
+  }
 }
 
 .products-header {

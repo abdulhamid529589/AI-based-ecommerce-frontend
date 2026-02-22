@@ -45,11 +45,34 @@
 /* Detail Container */
 .detail-container {
   display: grid;
-  grid-template-columns: 400px 1fr 380px;
-  gap: 40px;
-  max-width: 1500px;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: 16px 12px;
+}
+
+@media (min-width: 640px) {
+  .detail-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .detail-container {
+    grid-template-columns: 400px 1fr 380px;
+    gap: 40px;
+    padding: 32px 20px;
+    max-width: 1500px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .detail-container {
+    max-width: 1400px;
+  }
 }
 
 @media (max-width: 1024px) {

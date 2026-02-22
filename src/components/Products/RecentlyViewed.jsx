@@ -32,8 +32,8 @@ const RecentlyViewed = () => {
   }
 
   return (
-    <section className="py-8 md:py-12 bg-gray-50 dark:bg-gray-800/50">
-      <div className="container mx-auto px-4">
+    <section className="py-8 md:py-12 bg-gray-50 dark:bg-gray-800/50 px-0">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div>

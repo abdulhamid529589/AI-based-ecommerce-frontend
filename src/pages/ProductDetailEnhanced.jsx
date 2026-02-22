@@ -226,7 +226,7 @@ const ProductDetailEnhanced = () => {
 
       {/* Desktop Breadcrumb */}
       <div className="hidden md:block border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
-        <div className="container mx-auto px-4 py-4">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-4">
           <Breadcrumb
             items={[
               { label: 'Home', href: '/' },
@@ -243,7 +243,7 @@ const ProductDetailEnhanced = () => {
 
       {/* Main Content */}
       <div className="pt-20 md:pt-0">
-        <div className="container mx-auto px-3 sm:px-4 py-4 md:py-8">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl sm:px-4 py-4 md:py-8">
           {/* Main Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* IMAGE SECTION - Enhanced Gallery */}

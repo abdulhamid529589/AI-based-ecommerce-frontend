@@ -34,7 +34,7 @@ const Footer = () => {
 
   return (
     <footer className="glass border-t border-[hsla(var(--glass-border))] mt-16">
-      <div className="container mx-auto px-4 py-16">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-16 mx-auto max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand & Contact */}
           <div className="lg:col-span-1">

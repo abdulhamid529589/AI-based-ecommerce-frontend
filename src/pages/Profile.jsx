@@ -206,7 +206,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-10">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-8">

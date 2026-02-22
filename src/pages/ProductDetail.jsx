@@ -304,7 +304,7 @@ const ProductDetail = () => {
           </div>
 
           {/* Main Content */}
-          <div className="container mx-auto px-3 sm:px-4 py-4 md:py-8">
+          <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl sm:px-4 py-4 md:py-8">
             {/* Mobile Layout: Stacked */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {/* Image Gallery - Full width on mobile */}
@@ -621,7 +621,7 @@ const ProductDetail = () => {
 
           {/* Sticky Bottom Action - Mobile Only */}
           <div className="fixed bottom-0 left-0 right-0 z-40 bg-card border-t border-gray-200 dark:border-gray-700 md:hidden">
-            <div className="container mx-auto px-3 py-3">
+            <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-3">
               <div className="flex gap-2">
                 <button
                   onClick={handleAddToCart}

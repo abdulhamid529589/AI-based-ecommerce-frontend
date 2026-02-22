@@ -18,6 +18,7 @@ export const PremiumHero = ({ onExplore }) => {
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const [isAutoPlayPaused, setIsAutoPlayPaused] = useState(false)
+  const [swipeDirection, setSwipeDirection] = useState(null)
   const sliderRef = useRef(null)
   const { heroSlides, loading } = useSettings()
 
@@ -53,8 +54,16 @@ export const PremiumHero = ({ onExplore }) => {
     const isLeftSwipe = distance > 50
     const isRightSwipe = distance < -50
 
-    if (isLeftSwipe) nextSlide()
-    else if (isRightSwipe) prevSlide()
+    if (isLeftSwipe) {
+      nextSlide()
+      setSwipeDirection('left')
+    } else if (isRightSwipe) {
+      prevSlide()
+      setSwipeDirection('right')
+    }
+
+    // Clear swipe direction after animation
+    setTimeout(() => setSwipeDirection(null), 400)
   }
 
   const prevSlide = () => {
@@ -74,7 +83,7 @@ export const PremiumHero = ({ onExplore }) => {
   return (
     <div
       ref={sliderRef}
-      className="premium-hero relative w-full overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-[300px] xs:min-h-[380px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px]"
+      className="premium-hero relative w-full overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 min-h-[280px] sm:min-h-[380px] md:min-h-[450px] lg:min-h-[550px] xl:min-h-[600px]"
       onMouseEnter={() => {
         setShowArrows(true)
         setIsAutoPlayPaused(true)
@@ -122,9 +131,9 @@ export const PremiumHero = ({ onExplore }) => {
       </div>
 
       {/* Content Container */}
-      <div className="relative w-full h-full z-10 flex flex-col lg:flex-row items-center justify-between min-h-[300px] xs:min-h-[380px] sm:min-h-[450px] md:min-h-[500px] lg:min-h-[600px]">
+      <div className="relative w-full h-full z-10 flex flex-col lg:flex-row items-center justify-between min-h-[280px] sm:min-h-[380px] md:min-h-[450px] lg:min-h-[550px] xl:min-h-[600px]">
         {/* Left Content */}
-        <div className="premium-hero-content w-full lg:w-1/2 px-3 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-6 xs:py-8 sm:py-10 md:py-12 lg:py-16 flex flex-col justify-center z-10">
+        <div className="premium-hero-content w-full lg:w-1/2 px-3 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-4 xs:py-6 sm:py-8 md:py-12 lg:py-16 flex flex-col justify-center z-10">
           {/* Badge */}
           <div className="inline-flex items-center gap-1.5 xs:gap-2 w-fit mb-2 xs:mb-3 sm:mb-4 md:mb-6">
             <span className="inline-block w-1.5 h-1.5 xs:w-2 xs:h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
@@ -155,8 +164,14 @@ export const PremiumHero = ({ onExplore }) => {
               aria-label={currentSlide.ctaText || 'Shop Now'}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 group-hover:translate-x-full transition-transform duration-500" />
-              <span className="relative whitespace-nowrap">{currentSlide.ctaText || 'Shop Now'}</span>
-              <ChevronRight size={16} className="relative group-hover:translate-x-1 transition-transform xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0" aria-hidden="true" />
+              <span className="relative whitespace-nowrap">
+                {currentSlide.ctaText || 'Shop Now'}
+              </span>
+              <ChevronRight
+                size={16}
+                className="relative group-hover:translate-x-1 transition-transform xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                aria-hidden="true"
+              />
             </button>
 
             <button
@@ -166,7 +181,11 @@ export const PremiumHero = ({ onExplore }) => {
                 transition-all duration-300 items-center justify-center gap-1 xs:gap-1.5 sm:gap-2 min-h-[44px] sm:min-h-auto hover:scale-105 active:scale-95 flex-shrink-0 touch-manipulation"
               aria-label="Watch demo video"
             >
-              <Play size={16} className="group-hover:scale-110 transition-transform xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0" aria-hidden="true" />
+              <Play
+                size={16}
+                className="group-hover:scale-110 transition-transform xs:w-4 xs:h-4 sm:w-5 sm:h-5 flex-shrink-0"
+                aria-hidden="true"
+              />
               <span className="hidden sm:inline whitespace-nowrap">Watch Demo</span>
             </button>
           </div>
@@ -174,11 +193,15 @@ export const PremiumHero = ({ onExplore }) => {
           {/* Trust Signals */}
           <div className="flex flex-col xs:flex-row gap-2 xs:gap-3 sm:gap-6 md:gap-8 text-white/80 text-[9px] xs:text-xs sm:text-sm md:text-base">
             <div className="flex items-center gap-1.5 xs:gap-2 whitespace-nowrap">
-              <div className="flex-shrink-0 w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center text-green-400 text-[8px] xs:text-xs">✓</div>
+              <div className="flex-shrink-0 w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center text-green-400 text-[8px] xs:text-xs">
+                ✓
+              </div>
               <span>Fast Delivery</span>
             </div>
             <div className="flex items-center gap-1.5 xs:gap-2 whitespace-nowrap">
-              <div className="flex-shrink-0 w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center text-green-400 text-[8px] xs:text-xs">✓</div>
+              <div className="flex-shrink-0 w-5 h-5 xs:w-6 xs:h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 flex items-center justify-center text-green-400 text-[8px] xs:text-xs">
+                ✓
+              </div>
               <span>Secure Payment</span>
             </div>
           </div>
@@ -190,7 +213,9 @@ export const PremiumHero = ({ onExplore }) => {
           <div className="relative w-full max-w-sm h-80 lg:h-96 bg-white/5 backdrop-blur-xl rounded-2xl lg:rounded-3xl border border-white/20 flex items-end justify-center p-6 lg:p-8 overflow-hidden hover:border-white/40 transition-all duration-300 group">
             <div className="absolute top-6 lg:top-8 right-6 lg:right-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-xl lg:rounded-2xl px-4 lg:px-6 py-3 lg:py-5 text-white shadow-2xl shadow-orange-500/40 transform group-hover:scale-110 transition-transform z-20">
               <p className="text-xs lg:text-sm font-medium opacity-90">Limited Time</p>
-              <p className="text-2xl lg:text-4xl font-bold mt-1 lg:mt-2">{currentSlide.discount || '30%'}</p>
+              <p className="text-2xl lg:text-4xl font-bold mt-1 lg:mt-2">
+                {currentSlide.discount || '30%'}
+              </p>
               <p className="text-[9px] lg:text-xs mt-1 lg:mt-2 opacity-80">Ends in 2 days</p>
             </div>
             <div className="w-32 h-32 lg:w-48 lg:h-48 bg-gradient-to-br from-white/20 to-white/5 rounded-xl lg:rounded-2xl flex items-center justify-center text-white/40 text-xs lg:text-lg font-semibold">
@@ -202,7 +227,11 @@ export const PremiumHero = ({ onExplore }) => {
 
       {/* Indicators */}
       <div className="absolute bottom-3 xs:bottom-4 sm:bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30">
-        <div className="flex gap-1.5 xs:gap-2 sm:gap-3 justify-center" role="tablist" aria-label="Slide navigation">
+        <div
+          className="flex gap-1.5 xs:gap-2 sm:gap-3 justify-center"
+          role="tablist"
+          aria-label="Slide navigation"
+        >
           {slides.map((_, index) => (
             <button
               key={index}
@@ -220,50 +249,73 @@ export const PremiumHero = ({ onExplore }) => {
         </div>
       </div>
 
-      {/* Desktop Arrows */}
+      {/* Desktop Arrows - Hidden on Mobile, Shown on Hover */}
       {slides.length > 1 && (
-        <>
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-20 flex items-center justify-between px-2 sm:px-4 md:px-6 lg:px-8 pointer-events-none group">
           <button
             onClick={prevSlide}
-            className={`absolute left-4 sm:left-6 md:left-8 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/40 text-white transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-              showArrows ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            } hidden sm:flex focus-visible:outline-2 focus-visible:outline-white`}
+            className={`pointer-events-auto absolute left-0 top-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transition-all duration-300 min-h-[44px] min-w-[44px] sm:min-h-[52px] sm:min-w-[52px] md:min-h-[60px] md:min-w-[60px] flex items-center justify-center shadow-lg hover:shadow-xl ${
+              showArrows ? 'opacity-100 visible' : 'opacity-0 invisible'
+            } hidden sm:flex hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 touch-manipulation group-hover:opacity-100`}
             aria-label="Previous slide"
           >
-            <ChevronLeft size={24} className="sm:w-6 sm:h-6 md:w-8 md:h-8" aria-hidden="true" />
+            <ChevronLeft
+              className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0"
+              aria-hidden="true"
+              strokeWidth={2.5}
+            />
           </button>
 
           <button
             onClick={nextSlide}
-            className={`absolute right-4 sm:right-6 md:right-8 top-1/2 -translate-y-1/2 z-20 p-2 sm:p-3 rounded-full bg-white/20 hover:bg-white/40 text-white transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center ${
-              showArrows ? 'opacity-100' : 'opacity-0 pointer-events-none'
-            } hidden sm:flex focus-visible:outline-2 focus-visible:outline-white`}
+            className={`pointer-events-auto absolute right-0 top-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white transition-all duration-300 min-h-[44px] min-w-[44px] sm:min-h-[52px] sm:min-w-[52px] md:min-h-[60px] md:min-w-[60px] flex items-center justify-center shadow-lg hover:shadow-xl ${
+              showArrows ? 'opacity-100 visible' : 'opacity-0 invisible'
+            } hidden sm:flex hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-2 touch-manipulation group-hover:opacity-100`}
             aria-label="Next slide"
           >
-            <ChevronRight size={24} className="sm:w-6 sm:h-6 md:w-8 md:h-8" aria-hidden="true" />
+            <ChevronRight
+              className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 flex-shrink-0"
+              aria-hidden="true"
+              strokeWidth={2.5}
+            />
           </button>
-        </>
+        </div>
       )}
 
-      {/* Mobile Arrows */}
+      {/* Mobile Swipe Indicators - Bottom with Progress Bar */}
       {slides.length > 1 && (
-        <>
-          <button
-            onClick={prevSlide}
-            className="absolute left-1.5 xs:left-2 sm:hidden top-1/2 -translate-y-1/2 z-20 p-1.5 xs:p-2 rounded-full bg-white/30 hover:bg-white/50 text-white transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 touch-manipulation focus-visible:outline-2 focus-visible:outline-white"
-            aria-label="Previous slide"
-          >
-            <ChevronLeft size={18} className="xs:w-5 xs:h-5" aria-hidden="true" />
-          </button>
+        <div className="absolute bottom-0 left-0 right-0 sm:hidden z-20">
+          {/* Progress Bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-blue-400 to-blue-600 transition-all duration-500 ease-out"
+              style={{ width: `${((activeSlide + 1) / slides.length) * 100}%` }}
+              aria-hidden="true"
+            />
+          </div>
 
-          <button
-            onClick={nextSlide}
-            className="absolute right-1.5 xs:right-2 sm:hidden top-1/2 -translate-y-1/2 z-20 p-1.5 xs:p-2 rounded-full bg-white/30 hover:bg-white/50 text-white transition-all duration-300 min-h-[44px] min-w-[44px] flex items-center justify-center active:scale-95 touch-manipulation focus-visible:outline-2 focus-visible:outline-white"
-            aria-label="Next slide"
-          >
-            <ChevronRight size={18} className="xs:w-5 xs:h-5" aria-hidden="true" />
-          </button>
-        </>
+          {/* Counter and Swipe Indicator */}
+          <div className="flex items-center justify-between px-3 sm:px-4 py-3 sm:py-4 backdrop-blur-md bg-black/40">
+            <div className="flex items-center gap-2">
+              <span className="text-white text-sm font-bold">{activeSlide + 1}</span>
+              <div className="w-0.5 h-4 bg-white/40" />
+              <span className="text-white/70 text-sm">{slides.length}</span>
+            </div>
+
+            {/* Swipe Indicator Arrows */}
+            <div className="flex items-center gap-2 text-white/60 text-xs font-semibold">
+              {swipeDirection === 'right' && <span className="animate-pulse">← Swiped</span>}
+              {swipeDirection === 'left' && <span className="animate-pulse">Swiped →</span>}
+              {!swipeDirection && (
+                <span className="flex items-center gap-1 opacity-50">
+                  <span>←</span>
+                  <span className="hidden xs:inline">Swipe</span>
+                  <span>→</span>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Video Modal */}

@@ -264,7 +264,7 @@ const Products = () => {
 
       {/* Header */}
       <div className="bg-card border-b border-gray-200 dark:border-gray-700">
-        <div className="container mx-auto px-4 py-8">
+        <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-8">
           <h1 className="text-3xl font-bold text-foreground mb-2">
             {selectedCategory === 'all'
               ? 'Our Products'
@@ -295,7 +295,7 @@ const Products = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8 mx-auto max-w-7xl py-8">
         {/* Mobile Filter Toggle Button */}
         <div className="lg:hidden mb-6 flex gap-3">
           <button

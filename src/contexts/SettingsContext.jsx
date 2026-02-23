@@ -1,9 +1,11 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react'
 import api from '../lib/axios'
+import { initializeSocket } from '../lib/socket'
 
 /**
  * Settings Context for Global App Configuration
  * Manages hero slides, shop info, and system settings loaded from dashboard
+ * Now includes real-time updates via Socket.io
  */
 
 export const SettingsContext = createContext()
@@ -128,12 +130,23 @@ export const SettingsProvider = ({ children }) => {
 
   /**
    * Set up polling for settings changes (every 30 seconds)
-   * Can be disabled by setting interval to 0
+   * Also initialize Socket.io for real-time updates
    */
   useEffect(() => {
     loadSettings()
 
-    // Poll for settings updates every 30 seconds
+    // Initialize Socket.io for real-time category updates
+    try {
+      initializeSocket(null, (updatedCategories) => {
+        console.log('🔄 [Socket.io] Received category update:', updatedCategories)
+        setCategories(updatedCategories)
+      })
+    } catch (error) {
+      console.warn('⚠️ Socket.io initialization failed:', error.message)
+      // Fall back to polling if Socket.io fails
+    }
+
+    // Still keep polling as fallback (every 30 seconds)
     const pollInterval = setInterval(loadSettings, 30000)
 
     return () => {

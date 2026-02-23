@@ -1,7 +1,6 @@
 /**
- * 🚀 AMAZING HERO SLIDER - Works Beautifully on All Devices!
- * Mobile, Tablet, Desktop, 4K - fully responsive with gesture controls
- * Features: Gesture controls, swipe navigation, auto-play, smooth animations
+ * 🚀 AMAZING MOBILE HERO SLIDER
+ * Features: Gesture controls, swipe navigation, mobile optimized, smooth animations
  */
 
 import React, { useState, useEffect, useRef } from 'react'
@@ -21,9 +20,6 @@ const MobileHeroSlider = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
   const autoPlayTimer = useRef(null)
   const sliderRef = useSwipeNavigation(handleSwipe)
-
-  // Auto-play interval: 6 seconds on mobile, 8 seconds on desktop (more time to read)
-  const AUTO_PLAY_INTERVAL = window.innerWidth < 1024 ? 6000 : 8000
 
   const defaultSlides = [
     {
@@ -92,10 +88,10 @@ const MobileHeroSlider = () => {
 
     autoPlayTimer.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
-    }, AUTO_PLAY_INTERVAL) // Auto-advance every 6s (mobile) or 8s (desktop)
+    }, 6000) // Auto-advance every 6 seconds on mobile
 
     return () => clearInterval(autoPlayTimer.current)
-  }, [isAutoPlay, slides.length, AUTO_PLAY_INTERVAL])
+  }, [isAutoPlay, slides.length])
 
   function handleSwipe(direction) {
     if (direction === 'left') {
@@ -124,7 +120,7 @@ const MobileHeroSlider = () => {
 
   const resetAutoPlay = () => {
     setIsAutoPlay(false)
-    setTimeout(() => setIsAutoPlay(true), AUTO_PLAY_INTERVAL)
+    setTimeout(() => setIsAutoPlay(true), 6000)
   }
 
   const slide = slides[currentSlide]

@@ -235,6 +235,35 @@ const ProductInfoDetails = ({ productDetails }) => {
           </div>
         )}
 
+        {/* Short Description */}
+        {productDetails.short_description && (
+          <div className="info-section">
+            <h4 className="section-title">📝 Summary</h4>
+            <div className="info-grid">
+              <div className="info-item">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {productDetails.short_description}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Product Type */}
+        {productDetails.product_type && (
+          <div className="info-section">
+            <h4 className="section-title">📦 Product Type</h4>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="info-label">Type:</span>
+                <span className="info-value capitalize">
+                  {productDetails.product_type.replace('-', ' ').replace('_', ' ')}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Brand & Taxonomy */}
         {(productDetails.brand || productDetails.tags) && (
           <div className="info-section">
@@ -282,6 +311,51 @@ const ProductInfoDetails = ({ productDetails }) => {
                 </li>
               )}
             </ul>
+          </div>
+        )}
+
+        {/* SEO Information */}
+        {(productDetails.meta_title ||
+          productDetails.meta_description ||
+          productDetails.focus_keyword) && (
+          <div className="info-section">
+            <h4 className="section-title">🔍 SEO Information</h4>
+            <div className="info-grid">
+              {productDetails.meta_title && (
+                <div className="info-item">
+                  <span className="info-label">Meta Title:</span>
+                  <span className="info-value text-sm">{productDetails.meta_title}</span>
+                </div>
+              )}
+              {productDetails.meta_description && (
+                <div className="info-item">
+                  <span className="info-label">Meta Description:</span>
+                  <span className="info-value text-sm">{productDetails.meta_description}</span>
+                </div>
+              )}
+              {productDetails.focus_keyword && (
+                <div className="info-item">
+                  <span className="info-label">Focus Keyword:</span>
+                  <span className="info-value">
+                    <span className="tag-badge">{productDetails.focus_keyword}</span>
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Purchase Note */}
+        {productDetails.purchase_note && (
+          <div className="info-section">
+            <h4 className="section-title">📌 Important Note</h4>
+            <div className="info-grid">
+              <div className="info-item">
+                <p className="text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/20 p-3 rounded border border-amber-200 dark:border-amber-800">
+                  {productDetails.purchase_note}
+                </p>
+              </div>
+            </div>
           </div>
         )}
       </div>

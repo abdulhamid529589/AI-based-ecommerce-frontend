@@ -1,6 +1,6 @@
-import React, { createContext, useState, useEffect, useCallback } from 'react'
+import React, { createContext, useState, useEffect, useCallback, useRef } from 'react'
 import api from '../lib/axios'
-import { initializeSocket } from '../lib/socket'
+import io from 'socket.io-client'
 
 /**
  * Settings Context for Global App Configuration
@@ -54,7 +54,7 @@ export const SettingsProvider = ({ children }) => {
         return { data: { data: {} } }
       })
 
-      const categoriesRes = await api.get('/content/categories').catch((err) => {
+      const categoriesRes = await api.get(`/content/categories?_t=${Date.now()}`).catch((err) => {
         console.warn('⚠️ Failed to fetch categories:', err.response?.status, err.message)
         return { data: [] }
       })
@@ -129,24 +129,75 @@ export const SettingsProvider = ({ children }) => {
   }, [loadSettings])
 
   /**
-   * Set up polling for settings changes (every 30 seconds)
-   * Also initialize Socket.io for real-time updates
+   * Set up Socket.io for real-time category updates
+   * Also keep polling as fallback (every 30 seconds)
    */
   useEffect(() => {
     loadSettings()
 
     // Initialize Socket.io for real-time category updates
     try {
-      initializeSocket(null, (updatedCategories) => {
-        console.log('🔄 [Socket.io] Received category update:', updatedCategories)
+      const socketUrl = import.meta.env.VITE_SOCKET_URL
+      const socket = io(socketUrl, {
+        transports: ['websocket', 'polling'],
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
+        reconnectionAttempts: 5,
+      })
+
+      socket.on('connect', () => {
+        console.log('✅ [SettingsContext] Connected to Socket.IO:', socket.id)
+        // Join frontend room for category updates
+        socket.emit('identify', { role: 'frontend' })
+      })
+
+      socket.on('categories:updated', (data) => {
+        console.log('🔄 [SettingsContext] Received category update:', data)
+        // Handle both array of category objects and array of category names
+        let updatedCategories = []
+        if (Array.isArray(data.categories)) {
+          updatedCategories = data.categories
+        } else if (Array.isArray(data)) {
+          updatedCategories = data
+        }
         setCategories(updatedCategories)
       })
+
+      socket.on('categories:changed', (data) => {
+        console.log('🔄 [SettingsContext] Categories changed:', data)
+        let updatedCategories = []
+        if (Array.isArray(data.categories)) {
+          updatedCategories = data.categories
+        } else if (Array.isArray(data)) {
+          updatedCategories = data
+        }
+        setCategories(updatedCategories)
+      })
+
+      socket.on('disconnect', () => {
+        console.warn('⚠️ [SettingsContext] Socket.IO disconnected, will retry polling')
+      })
+
+      socket.on('connect_error', (error) => {
+        console.warn('⚠️ [SettingsContext] Socket.IO connection error:', error.message)
+      })
+
+      return () => {
+        if (socket) {
+          socket.off('categories:updated')
+          socket.off('categories:changed')
+          socket.off('connect')
+          socket.off('disconnect')
+          socket.off('connect_error')
+          socket.disconnect()
+        }
+      }
     } catch (error) {
       console.warn('⚠️ Socket.io initialization failed:', error.message)
-      // Fall back to polling if Socket.io fails
     }
 
-    // Still keep polling as fallback (every 30 seconds)
+    // Keep polling as fallback (every 30 seconds)
     const pollInterval = setInterval(loadSettings, 30000)
 
     return () => {

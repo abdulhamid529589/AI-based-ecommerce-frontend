@@ -64,7 +64,7 @@ const ProductInfoDetails = ({ productDetails }) => {
           <div className="meta-value">
             <div className="status-badge category">
               <Tag className="w-4 h-4" />
-              <span className="capitalize">{productDetails.category}</span>
+              <span className="capitalize">{productDetails.category || 'Uncategorized'}</span>
             </div>
           </div>
         </div>

@@ -11,6 +11,7 @@ import AdvancedFilters from '../components/Products/AdvancedFilters'
 import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { useLocation, useSearchParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useSocket } from '../hooks/useSocket'
 import { fetchAllProducts } from '../store/slices/productSlice'
 
 const Products = () => {
@@ -18,6 +19,23 @@ const Products = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { categories: settingsCategories } = useSettings()
+  const { socket, isConnected } = useSocket('frontend')
+
+  // Log Socket.io connection status for debugging
+  useEffect(() => {
+    if (socket) {
+      console.log('📱 [Products] Socket.io setup:', { isConnected })
+
+      // Listen for real-time category updates from Socket.io
+      socket.on('categories:updated', (data) => {
+        console.log('🔄 [Products] Real-time category update received:', data)
+      })
+
+      return () => {
+        socket.off('categories:updated')
+      }
+    }
+  }, [socket, isConnected])
 
   // Normalize categories to handle both array and object subcategories format
   const normalizeCategory = (category) => {
@@ -239,7 +257,9 @@ const Products = () => {
   const displayedProducts = filteredProducts
 
   // Get unique categories from categories array
-  const categoryNames = categories.map((cat) => cat.name.toLowerCase())
+  const categoryNames = categories
+    .map((cat) => cat.name?.toLowerCase())
+    .filter((name) => name && name !== 'undefined')
   const subcategoryOptions = getSubcategoryOptions()
 
   return (

@@ -155,7 +155,7 @@ const ReviewForm = ({ productId, onReviewAdded, userName = '' }) => {
           transition={{ delay: 0.1 }}
         >
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-            How would you rate this product? <span className="text-red-500">*</span>
+            How would you rate this product? <span className="text-red-500">*</span> (required)
           </label>
           <div className="flex gap-3 items-center">
             <div className="flex gap-2">
@@ -203,7 +203,7 @@ const ReviewForm = ({ productId, onReviewAdded, userName = '' }) => {
           transition={{ delay: 0.3 }}
         >
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Your Review <span className="text-red-500">*</span>
+            Your Review <span className="text-red-500">*</span> (required)
           </label>
           <motion.textarea
             whileFocus={{ scale: 1.01 }}
@@ -228,7 +228,7 @@ const ReviewForm = ({ productId, onReviewAdded, userName = '' }) => {
           transition={{ delay: 0.4 }}
         >
           <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-            Add Photo (Optional)
+            Add Photo <span className="text-gray-500">(optional)</span>
           </label>
           <div className="relative">
             <input

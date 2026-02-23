@@ -69,19 +69,17 @@ const ProductInfoDetails = ({ productDetails }) => {
           </div>
         </div>
 
-        {/* Price Tier */}
+        {/* Visibility & Status */}
         <div className="meta-item">
-          <div className="meta-label">Price Tier</div>
+          <div className="meta-label">Visibility</div>
           <div className="meta-value">
             <div className="status-badge">
-              {price < 5000 ? (
-                <span>Budget-friendly</span>
-              ) : price < 15000 ? (
-                <span>Mid-range</span>
-              ) : price < 50000 ? (
-                <span>Premium</span>
+              {productDetails.visibility === 'hidden' ? (
+                <span>🔒 Hidden from Catalog</span>
+              ) : productDetails.visibility === 'search' ? (
+                <span>🔍 Search Only</span>
               ) : (
-                <span>Luxury</span>
+                <span>👁️ Visible</span>
               )}
             </div>
           </div>
@@ -265,7 +263,7 @@ const ProductInfoDetails = ({ productDetails }) => {
         )}
 
         {/* Brand & Taxonomy */}
-        {(productDetails.brand || productDetails.tags) && (
+        {(productDetails.brand || productDetails.tags || productDetails.image_alts) && (
           <div className="info-section">
             <h4 className="section-title">🏷️ Classification</h4>
             <div className="info-grid">
@@ -289,6 +287,18 @@ const ProductInfoDetails = ({ productDetails }) => {
                     </div>
                   </div>
                 )}
+              {productDetails.image_alts && Object.keys(productDetails.image_alts).length > 0 && (
+                <div className="info-item">
+                  <span className="info-label">Image Alt Text:</span>
+                  <div className="alt-text-list">
+                    {Object.entries(productDetails.image_alts).map(([key, value]) => (
+                      <div key={key} className="text-sm text-gray-600 dark:text-gray-400">
+                        <strong>{key}:</strong> {value}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -338,6 +348,61 @@ const ProductInfoDetails = ({ productDetails }) => {
                   <span className="info-label">Focus Keyword:</span>
                   <span className="info-value">
                     <span className="tag-badge">{productDetails.focus_keyword}</span>
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Supplier Information */}
+        {(productDetails.supplier_id || productDetails.vendor || productDetails.supplier_name) && (
+          <div className="info-section">
+            <h4 className="section-title">🏪 Supplier Information</h4>
+            <div className="info-grid">
+              {productDetails.supplier_name && (
+                <div className="info-item">
+                  <span className="info-label">Supplier:</span>
+                  <span className="info-value">{productDetails.supplier_name}</span>
+                </div>
+              )}
+              {productDetails.vendor && (
+                <div className="info-item">
+                  <span className="info-label">Vendor:</span>
+                  <span className="info-value">{productDetails.vendor}</span>
+                </div>
+              )}
+              {productDetails.supplier_id && (
+                <div className="info-item">
+                  <span className="info-label">Supplier ID:</span>
+                  <span className="info-value text-xs font-mono">{productDetails.supplier_id}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Timestamp Information */}
+        {(productDetails.created_at ||
+          productDetails.updated_at ||
+          productDetails.createdAt ||
+          productDetails.updatedAt) && (
+          <div className="info-section">
+            <h4 className="section-title">⏰ Timeline</h4>
+            <div className="info-grid">
+              {(productDetails.created_at || productDetails.createdAt) && (
+                <div className="info-item">
+                  <span className="info-label">Created:</span>
+                  <span className="info-value text-sm">
+                    {formatDate(productDetails.created_at || productDetails.createdAt)}
+                  </span>
+                </div>
+              )}
+              {(productDetails.updated_at || productDetails.updatedAt) && (
+                <div className="info-item">
+                  <span className="info-label">Last Updated:</span>
+                  <span className="info-value text-sm">
+                    {formatDate(productDetails.updated_at || productDetails.updatedAt)}
                   </span>
                 </div>
               )}

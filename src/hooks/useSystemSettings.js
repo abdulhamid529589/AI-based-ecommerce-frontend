@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import api from '../services/api'
+import { axiosInstance } from '../lib/axios'
 
 export const useSystemSettings = () => {
   const [settings, setSettings] = useState(null)
@@ -9,7 +9,7 @@ export const useSystemSettings = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await api.get('/content/global')
+        const response = await axiosInstance.get('/content/global')
         const data = response.data?.data || {}
 
         setSettings({

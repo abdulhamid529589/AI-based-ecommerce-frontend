@@ -136,62 +136,64 @@ export const SettingsProvider = ({ children }) => {
     loadSettings()
 
     // Initialize Socket.io for real-time category updates
+    let socket = null
     try {
       const socketUrl = import.meta.env.VITE_SOCKET_URL
-      const socket = io(socketUrl, {
-        transports: ['websocket', 'polling'],
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        reconnectionAttempts: 5,
-      })
+      if (!socketUrl) {
+        console.warn('⚠️ VITE_SOCKET_URL not configured, using polling only')
+      } else {
+        socket = io(socketUrl, {
+          transports: ['websocket', 'polling'],
+          reconnection: true,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          reconnectionAttempts: 5,
+          upgrade: true, // Allow upgrade from polling to websocket
+          forceNew: true, // Create new connection (don't reuse existing)
+        })
 
-      socket.on('connect', () => {
-        console.log('✅ [SettingsContext] Connected to Socket.IO:', socket.id)
-        // Join frontend room for category updates
-        socket.emit('identify', { role: 'frontend' })
-      })
+        socket.on('connect', () => {
+          console.log('✅ [SettingsContext] Connected to Socket.IO:', socket.id)
+          // Identify as frontend client
+          socket.emit('identify', { role: 'frontend' })
+          // Also emit client-type for compatibility
+          socket.emit('client-type', 'frontend')
+        })
 
-      socket.on('categories:updated', (data) => {
-        console.log('🔄 [SettingsContext] Received category update:', data)
-        // Handle both array of category objects and array of category names
-        let updatedCategories = []
-        if (Array.isArray(data.categories)) {
-          updatedCategories = data.categories
-        } else if (Array.isArray(data)) {
-          updatedCategories = data
-        }
-        setCategories(updatedCategories)
-      })
+        socket.on('categories:updated', (data) => {
+          console.log('🔄 [SettingsContext] Received category update:', data)
+          // Handle both array of category objects and array of category names
+          let updatedCategories = []
+          if (Array.isArray(data.categories)) {
+            updatedCategories = data.categories
+          } else if (Array.isArray(data)) {
+            updatedCategories = data
+          }
+          setCategories(updatedCategories)
+        })
 
-      socket.on('categories:changed', (data) => {
-        console.log('🔄 [SettingsContext] Categories changed:', data)
-        let updatedCategories = []
-        if (Array.isArray(data.categories)) {
-          updatedCategories = data.categories
-        } else if (Array.isArray(data)) {
-          updatedCategories = data
-        }
-        setCategories(updatedCategories)
-      })
+        socket.on('categories:changed', (data) => {
+          console.log('🔄 [SettingsContext] Categories changed:', data)
+          let updatedCategories = []
+          if (Array.isArray(data.categories)) {
+            updatedCategories = data.categories
+          } else if (Array.isArray(data)) {
+            updatedCategories = data
+          }
+          setCategories(updatedCategories)
+        })
 
-      socket.on('disconnect', () => {
-        console.warn('⚠️ [SettingsContext] Socket.IO disconnected, will retry polling')
-      })
+        socket.on('disconnect', () => {
+          console.warn('⚠️ [SettingsContext] Socket.IO disconnected, will retry polling')
+        })
 
-      socket.on('connect_error', (error) => {
-        console.warn('⚠️ [SettingsContext] Socket.IO connection error:', error.message)
-      })
+        socket.on('connect_error', (error) => {
+          console.warn('⚠️ [SettingsContext] Socket.IO connection error:', error?.message)
+        })
 
-      return () => {
-        if (socket) {
-          socket.off('categories:updated')
-          socket.off('categories:changed')
-          socket.off('connect')
-          socket.off('disconnect')
-          socket.off('connect_error')
-          socket.disconnect()
-        }
+        socket.on('error', (error) => {
+          console.warn('⚠️ [SettingsContext] Socket.IO error:', error)
+        })
       }
     } catch (error) {
       console.warn('⚠️ Socket.io initialization failed:', error.message)
@@ -202,6 +204,15 @@ export const SettingsProvider = ({ children }) => {
 
     return () => {
       if (pollInterval) clearInterval(pollInterval)
+      if (socket) {
+        socket.off('categories:updated')
+        socket.off('categories:changed')
+        socket.off('connect')
+        socket.off('disconnect')
+        socket.off('connect_error')
+        socket.off('error')
+        socket.disconnect()
+      }
     }
   }, [loadSettings])
 

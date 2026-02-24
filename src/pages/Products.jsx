@@ -21,6 +21,30 @@ const Products = () => {
   const { categories: settingsCategories } = useSettings()
   const { socket, isConnected } = useSocket('frontend')
 
+  // Declare state early so it's available in all hooks
+  const [filteredProducts, setFilteredProducts] = useState([])
+  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedSubcategory, setSelectedSubcategory] = useState('all')
+  const [priceRange, setPriceRange] = useState([0, 100000])
+  const [showAISearch, setShowAISearch] = useState(false)
+  const [showMobileFilters, setShowMobileFilters] = useState(false)
+  const [sortBy, setSortBy] = useState('relevant')
+  const initialLimit = parseInt(
+    searchParams.get('limit') || localStorage.getItem('itemsPerPage') || '10',
+    10,
+  )
+  const [itemsPerPage, setItemsPerPage] = useState(initialLimit)
+
+  // Get current page from URL, default to 1 (SEO best practice for bookmarkable pages)
+  const currentPage = parseInt(searchParams.get('page') || '1', 10)
+
+  const products = useSelector((state) => state.product.products, shallowEqual)
+  const loading = useSelector((state) => state.product.loading)
+  const totalProducts = useSelector((state) => state.product.totalProducts)
+  const searchTerm = searchParams.get('q') || ''
+  const categoryParam = searchParams.get('category') || 'all'
+  const subcategoryParam = searchParams.get('subcategory') || 'all'
+
   // Log Socket.io connection status for debugging
   useEffect(() => {
     if (socket) {
@@ -31,11 +55,67 @@ const Products = () => {
         console.log('🔄 [Products] Real-time category update received:', data)
       })
 
+      // Listen for real-time subcategory updates
+      socket.on('subcategories:changed', (data) => {
+        console.log('🔄 [Products] Real-time subcategory update received:', data)
+      })
+
+      // Listen for real-time product updates (new products, updates, stock changes)
+      socket.on('products:changed', (data) => {
+        console.log('🔄 [Products] Real-time product update received:', data)
+        // Refresh products list when products are created/updated
+        if (data?.action === 'created' || data?.action === 'updated' || data?.action === 'stock') {
+          console.log('🔄 [Products] Refreshing products list due to:', data.action)
+          // Refresh the current products
+          const params = {}
+          if (currentPage) params.page = currentPage
+          if (itemsPerPage) params.limit = itemsPerPage
+          if (searchTerm) params.search = searchTerm
+          if (selectedCategory && selectedCategory !== 'all') params.category = selectedCategory
+          if (selectedSubcategory && selectedSubcategory !== 'all')
+            params.subcategory = selectedSubcategory
+          if (priceRange && (priceRange[0] !== 0 || priceRange[1] !== 100000)) {
+            params.price = `${priceRange[0]}-${priceRange[1]}`
+          }
+          dispatch(fetchAllProducts(params))
+        }
+      })
+
+      // Listen for product deletion
+      socket.on('products:deleted', (data) => {
+        console.log('🗑️ [Products] Product deleted:', data)
+        // Refresh products list when products are deleted
+        const params = {}
+        if (currentPage) params.page = currentPage
+        if (itemsPerPage) params.limit = itemsPerPage
+        if (searchTerm) params.search = searchTerm
+        if (selectedCategory && selectedCategory !== 'all') params.category = selectedCategory
+        if (selectedSubcategory && selectedSubcategory !== 'all')
+          params.subcategory = selectedSubcategory
+        if (priceRange && (priceRange[0] !== 0 || priceRange[1] !== 100000)) {
+          params.price = `${priceRange[0]}-${priceRange[1]}`
+        }
+        dispatch(fetchAllProducts(params))
+      })
+
       return () => {
         socket.off('categories:updated')
+        socket.off('subcategories:changed')
+        socket.off('products:changed')
+        socket.off('products:deleted')
       }
     }
-  }, [socket, isConnected])
+  }, [
+    socket,
+    isConnected,
+    dispatch,
+    currentPage,
+    itemsPerPage,
+    searchTerm,
+    selectedCategory,
+    selectedSubcategory,
+    priceRange,
+  ])
 
   // Normalize categories to handle both array and object subcategories format
   const normalizeCategory = (category) => {
@@ -58,19 +138,6 @@ const Products = () => {
   // Use settings categories or empty array as fallback
   const categories = (settingsCategories || []).map(normalizeCategory).filter(Boolean)
 
-  const [filteredProducts, setFilteredProducts] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [selectedSubcategory, setSelectedSubcategory] = useState('all')
-  const [priceRange, setPriceRange] = useState([0, 100000])
-  const [showAISearch, setShowAISearch] = useState(false)
-  const [showMobileFilters, setShowMobileFilters] = useState(false)
-  const [sortBy, setSortBy] = useState('relevant')
-  const initialLimit = parseInt(
-    searchParams.get('limit') || localStorage.getItem('itemsPerPage') || '10',
-    10,
-  )
-  const [itemsPerPage, setItemsPerPage] = useState(initialLimit)
-
   const handleItemsPerPageChange = (value) => {
     setItemsPerPage(value)
     localStorage.setItem('itemsPerPage', String(value))
@@ -90,10 +157,7 @@ const Products = () => {
       setItemsPerPage(urlLimit)
       localStorage.setItem('itemsPerPage', String(urlLimit))
     }
-  }, [searchParams])
-
-  // Get current page from URL, default to 1 (SEO best practice for bookmarkable pages)
-  const currentPage = parseInt(searchParams.get('page') || '1', 10)
+  }, [searchParams, itemsPerPage])
 
   // Handle page change with URL update (SEO: ensures each page has unique URL)
   const handlePageChange = (newPage) => {
@@ -111,13 +175,6 @@ const Products = () => {
         ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 0)
   }
-
-  const products = useSelector((state) => state.product.products, shallowEqual)
-  const loading = useSelector((state) => state.product.loading)
-  const totalProducts = useSelector((state) => state.product.totalProducts)
-  const searchTerm = searchParams.get('q') || ''
-  const categoryParam = searchParams.get('category') || 'all'
-  const subcategoryParam = searchParams.get('subcategory') || 'all'
 
   // Fetch paginated products when page, search or filters change
   useEffect(() => {

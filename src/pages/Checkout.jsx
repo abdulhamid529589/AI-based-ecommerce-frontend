@@ -3,6 +3,7 @@ import { ArrowLeft, Check, Loader, ShoppingCart, Truck, MapPin, CreditCard } fro
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { axiosInstance } from '../lib/axios'
+import { useSystemSettings } from '../hooks/useSystemSettings'
 import { toast } from 'react-toastify'
 import { clearCart } from '../store/slices/cartSlice'
 import { getOperationErrorMessage } from '../utils/errorHandler'
@@ -75,6 +76,7 @@ const PAYMENT_METHODS = [
 const Checkout = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { settings } = useSystemSettings()
 
   // State
   const [currentStep, setCurrentStep] = useState(1) // 1: Shipping, 2: Payment, 3: Review
@@ -100,22 +102,29 @@ const Checkout = () => {
   // Validation errors
   const [errors, setErrors] = useState({})
 
-  // Calculate shipping
+  // Calculate shipping - Dynamic from settings
   const calculateShipping = () => {
     if (subtotal === 0) return 0
     if (!shippingDetails.district || shippingDetails.district.trim() === '') return 0
 
-    const district = shippingDetails.district.toLowerCase().trim()
-    if (district === 'chittagong' || district === 'চট্টগ্রাম') {
-      return 60
+    // Check free shipping threshold from settings
+    if (
+      settings?.shipping?.freeShippingEnabled &&
+      subtotal >= settings.shipping.freeShippingThreshold
+    ) {
+      return 0 // Free shipping
     }
-    return 100
+
+    // Use dynamic shipping cost from settings
+    return settings?.shipping?.standardShippingCost || 100
   }
 
   // Calculate totals
   const subtotal = (cartItems || []).reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = calculateShipping()
-  const tax = Math.round(subtotal * 0.05) // 5% tax
+  // Dynamic tax rate from settings
+  const taxRate = settings?.pricing?.taxRate || 15
+  const tax = Math.round(subtotal * (taxRate / 100))
   const total = subtotal + shipping + tax
 
   // Redirect if not authenticated or cart empty
@@ -571,39 +580,64 @@ const Checkout = () => {
                 </div>
 
                 <div className="space-y-3">
-                  {PAYMENT_METHODS.map((method) => (
-                    <label
-                      key={method.id}
-                      className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        paymentMethod === method.id
-                          ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <input
-                          type="radio"
-                          name="paymentMethod"
-                          value={method.id}
-                          checked={paymentMethod === method.id}
-                          onChange={(e) => setPaymentMethod(e.target.value)}
-                          className="w-4 h-4 text-blue-600 cursor-pointer"
-                        />
-                        <span className="text-2xl ml-3">{method.icon}</span>
-                        <div className="ml-4">
-                          <p className="font-semibold text-foreground">{method.name}</p>
-                          <p className="text-sm text-muted-foreground">{method.description}</p>
-                        </div>
-                      </div>
-                    </label>
-                  ))}
+                  {/* Dynamic Payment Methods from Settings */}
+                  {(settings?.paymentMethods || PAYMENT_METHODS)
+                    .filter((method) => method.enabled !== false)
+                    .map((method) => {
+                      // Map IDs to icon if not provided
+                      const iconMap = {
+                        cod: '💵',
+                        bkash: '📱',
+                        nagad: '📱',
+                        rocket: '🚀',
+                      }
+                      const icon = method.icon || iconMap[method.id] || '💳'
+                      const description =
+                        method.description ||
+                        {
+                          cod: 'Pay when product arrives',
+                          bkash: 'Mobile payment',
+                          nagad: 'Mobile payment',
+                          rocket: 'Mobile payment',
+                        }[method.id] ||
+                        ''
+
+                      return (
+                        <label
+                          key={method.id}
+                          className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                            paymentMethod === method.id
+                              ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
+                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                          }`}
+                        >
+                          <div className="flex items-center">
+                            <input
+                              type="radio"
+                              name="paymentMethod"
+                              value={method.id}
+                              checked={paymentMethod === method.id}
+                              onChange={(e) => setPaymentMethod(e.target.value)}
+                              className="w-4 h-4 text-blue-600 cursor-pointer"
+                            />
+                            <span className="text-2xl ml-3">{icon}</span>
+                            <div className="ml-4">
+                              <p className="font-semibold text-foreground">{method.name}</p>
+                              <p className="text-sm text-muted-foreground">{description}</p>
+                            </div>
+                          </div>
+                        </label>
+                      )
+                    })}
                 </div>
 
                 {/* Payment Info */}
                 <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900 rounded-lg">
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     <strong>Selected Method:</strong>{' '}
-                    {PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.name}
+                    {(settings?.paymentMethods || PAYMENT_METHODS).find(
+                      (m) => m.id === paymentMethod,
+                    )?.name || 'N/A'}
                   </p>
                 </div>
 
@@ -653,7 +687,8 @@ const Checkout = () => {
                 <div className="mb-6 pb-6 border-b dark:border-gray-700">
                   <h3 className="font-semibold text-foreground mb-3">Payment Method</h3>
                   <p className="text-muted-foreground text-sm">
-                    {PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.name}
+                    {settings?.paymentMethods?.find((m) => m.id === paymentMethod)?.name ||
+                      PAYMENT_METHODS.find((m) => m.id === paymentMethod)?.name}
                   </p>
                 </div>
 
@@ -732,11 +767,16 @@ const Checkout = () => {
                   <span>৳{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
-                  <span>Shipping:</span>
+                  <span>
+                    Shipping:
+                    {shipping === 0 && settings?.shipping?.freeShippingEnabled && (
+                      <span className="ml-1 text-green-600 font-semibold">(Free)</span>
+                    )}
+                  </span>
                   <span>৳{shipping.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
-                  <span>Tax (5%):</span>
+                  <span>Tax ({taxRate}%):</span>
                   <span>৳{tax.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold text-foreground pt-3 border-t dark:border-gray-700">

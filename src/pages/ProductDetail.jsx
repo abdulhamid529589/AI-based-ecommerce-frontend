@@ -19,6 +19,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux'
 import { fetchSingleProduct } from '../store/slices/productSlice'
 import { addToCart } from '../store/slices/cartSlice'
 import { addToWishlist, removeFromWishlist } from '../store/slices/wishlistSlice'
+import { useSystemSettings } from '../hooks/useSystemSettings'
 import ReviewForm from '../components/Products/ReviewForm'
 import ReviewsList from '../components/Products/ReviewsList'
 import ProductDescriptionSection from '../components/Products/ProductDescriptionSection'
@@ -52,6 +53,7 @@ const ProductDetail = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { settings } = useSystemSettings()
   const [quantity, setQuantity] = useState(1)
   const [selectedImage, setSelectedImage] = useState(0)
   const [showComparison, setShowComparison] = useState(false)
@@ -385,10 +387,47 @@ const ProductDetail = () => {
                   flashSaleEndsAt={productDetails.flash_sale_ends_at}
                 />
 
+                {/* Dynamic Free Shipping Badge - From Settings */}
+                {settings?.shipping?.freeShippingEnabled &&
+                  price >= settings.shipping.freeShippingThreshold && (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                      <p className="text-green-800 font-semibold flex items-center gap-2">
+                        <span className="text-lg">✓</span> Free Shipping on this order!
+                      </p>
+                      <p className="text-sm text-green-700 mt-1">
+                        Orders over ৳{settings.shipping.freeShippingThreshold.toLocaleString()} get
+                        free shipping
+                      </p>
+                    </div>
+                  )}
+
                 {/* Stock Indicator */}
                 <div>
                   <StockIndicator stock={productDetails.stock} maxStock={20} />
                 </div>
+
+                {/* Dynamic Low Stock Warning - From Settings */}
+                {productDetails.stock > 0 &&
+                  productDetails.stock <= settings?.inventory?.lowStockThreshold && (
+                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                      <p className="text-orange-800 text-sm font-semibold">
+                        ⚠️ Only {productDetails.stock} items left - Order soon!
+                      </p>
+                    </div>
+                  )}
+
+                {/* Dynamic Backorder Info - From Settings */}
+                {productDetails.stock <= 0 && settings?.inventory?.allowBackorders && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <p className="text-blue-800 font-semibold">
+                      📦 Available for pre-order
+                      <br />
+                      <span className="text-sm">
+                        Estimated delivery: {settings.inventory.backorderDays} days
+                      </span>
+                    </p>
+                  </div>
+                )}
 
                 {/* Urgency Widget - Creates FOMO */}
                 <UrgencyWidget
@@ -401,19 +440,31 @@ const ProductDetail = () => {
 
                 {/* Quick Info Cards - Mobile friendly */}
                 <div className="grid grid-cols-3 gap-2 md:gap-3">
+                  {/* Dynamic: Free Shipping Cost */}
                   <div className="bg-card rounded-lg p-3 text-center border border-gray-200 dark:border-gray-700">
                     <Truck className="w-6 h-6 text-blue-600 mx-auto mb-1" />
                     <p className="text-xs font-semibold text-gray-900 dark:text-white">
-                      Free Shipping
+                      {settings?.shipping?.freeShippingEnabled &&
+                      price >= settings.shipping.freeShippingThreshold
+                        ? 'Free Shipping'
+                        : `৳${settings?.shipping?.standardShippingCost || 100}`}
                     </p>
                   </div>
+                  {/* Dynamic: Return Window */}
                   <div className="bg-card rounded-lg p-3 text-center border border-gray-200 dark:border-gray-700">
                     <RotateCcw className="w-6 h-6 text-green-600 mx-auto mb-1" />
-                    <p className="text-xs font-semibold text-foreground">30-Day Return</p>
+                    <p className="text-xs font-semibold text-foreground">
+                      {settings?.returns?.returnEnabled
+                        ? `${settings.returns.returnWindowDays}-Day Return`
+                        : 'No Returns'}
+                    </p>
                   </div>
+                  {/* Dynamic: Currency Display */}
                   <div className="bg-card rounded-lg p-3 text-center border border-gray-200 dark:border-gray-700">
                     <Shield className="w-6 h-6 text-purple-600 mx-auto mb-1" />
-                    <p className="text-xs font-semibold text-foreground">1-Year Warranty</p>
+                    <p className="text-xs font-semibold text-foreground">
+                      {settings?.pricing?.currency || 'BDT'}
+                    </p>
                   </div>
                 </div>
 

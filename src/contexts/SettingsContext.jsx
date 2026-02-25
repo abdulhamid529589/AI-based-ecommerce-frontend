@@ -149,7 +149,9 @@ export const SettingsProvider = ({ children }) => {
           reconnectionDelayMax: 5000,
           reconnectionAttempts: 5,
           upgrade: true, // Allow upgrade from polling to websocket
-          forceNew: true, // Create new connection (don't reuse existing)
+          forceNew: false, // Reuse connection
+          withCredentials: true, // Send cookies for authentication
+          multiplex: true, // Allow multiple connections
         })
 
         socket.on('connect', () => {

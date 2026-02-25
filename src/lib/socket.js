@@ -3,9 +3,20 @@ import io from 'socket.io-client'
 /**
  * Socket.io client for real-time updates
  * Handles category updates and other real-time events
+ * With comprehensive error handling and logging
  */
 
 let socket = null
+
+/**
+ * Enhanced logging for frontend socket debugging
+ */
+const logSocket = {
+  connect: (msg, data) => console.log(`✅ [Socket] ${msg}`, data || ''),
+  error: (msg, error) => console.error(`❌ [Socket] ${msg}`, error || ''),
+  warn: (msg, data) => console.warn(`⚠️ [Socket] ${msg}`, data || ''),
+  debug: (msg, data) => console.debug(`🔍 [Socket] ${msg}`, data || ''),
+}
 
 /**
  * Initialize Socket.io connection
@@ -13,50 +24,103 @@ let socket = null
  * @param {function} onCategoryUpdate - Callback when categories are updated
  */
 export const initializeSocket = (url = null, onCategoryUpdate = null) => {
-  // Auto-detect server URL if not provided
+  // Use environment variable URL or auto-detect
   const serverUrl =
     url ||
+    import.meta.env.VITE_SOCKET_URL ||
     `${window.location.protocol}//${window.location.hostname}:${window.location.port === '5174' ? '5000' : window.location.port}`
 
   if (socket && socket.connected) {
-    console.log('🔌 Socket.io already connected')
+    logSocket.debug('Socket already connected', { socketId: socket.id })
     return socket
   }
 
-  console.log(`🔌 Connecting to Socket.io at ${serverUrl}...`)
-
-  socket = io(serverUrl, {
-    reconnection: true,
-    reconnectionDelay: 1000,
-    reconnectionDelayMax: 5000,
-    reconnectionAttempts: 5,
-    transports: ['websocket', 'polling'],
+  logSocket.connect(`Connecting to Socket.io at ${serverUrl}`, {
+    url: serverUrl,
+    env: import.meta.env.VITE_SOCKET_URL,
   })
 
-  /**
-   * Connection events
-   */
-  socket.on('connect', () => {
-    console.log(`✅ Socket.io connected: ${socket.id}`)
-  })
+  try {
+    socket = io(serverUrl, {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
+      transports: ['websocket', 'polling'],
+      forceNew: false,
+      multiplex: true,
+      withCredentials: true,
+      timeout: 10000, // 10 second connection timeout
+    })
 
-  socket.on('disconnect', (reason) => {
-    console.warn(`⚠️ Socket.io disconnected: ${reason}`)
-  })
+    /**
+     * Connection events
+     */
+    socket.on('connect', () => {
+      logSocket.connect(`Connected to Socket.io`, { socketId: socket.id })
+    })
 
-  socket.on('connect_error', (error) => {
-    console.error(`❌ Socket.io connection error:`, error)
-  })
+    socket.on('connect_error', (error) => {
+      logSocket.error(`Connection error`, {
+        message: error.message,
+        type: error.type,
+        code: error.code,
+      })
+    })
 
-  /**
-   * Real-time category updates
-   */
-  socket.on('categories:updated', (data) => {
-    console.log('📢 [Socket.io] Categories updated from server:', data)
-    if (onCategoryUpdate && typeof onCategoryUpdate === 'function') {
-      onCategoryUpdate(data.categories)
-    }
-  })
+    socket.on('disconnect', (reason) => {
+      logSocket.warn(`Disconnected from Socket.io`, { reason })
+    })
+
+    socket.on('reconnect_attempt', () => {
+      logSocket.debug('Attempting to reconnect')
+    })
+
+    socket.on('reconnect', () => {
+      logSocket.connect('Successfully reconnected')
+    })
+
+    socket.on('error', (error) => {
+      logSocket.error('Socket error', error)
+    })
+
+    /**
+     * Real-time category updates
+     */
+    socket.on('categories:updated', (data) => {
+      logSocket.debug('Categories update received', {
+        count: data?.categories?.length,
+        event: data?.event,
+      })
+      if (onCategoryUpdate && typeof onCategoryUpdate === 'function') {
+        try {
+          onCategoryUpdate(data.categories)
+        } catch (error) {
+          logSocket.error('Error in onCategoryUpdate callback', error)
+        }
+      }
+    })
+
+    socket.on('categories:changed', (data) => {
+      logSocket.debug('Categories changed', {
+        action: data?.action,
+        category: data?.category?.name,
+      })
+      if (onCategoryUpdate && typeof onCategoryUpdate === 'function') {
+        try {
+          onCategoryUpdate(data)
+        } catch (error) {
+          logSocket.error('Error in onCategoryUpdate callback', error)
+        }
+      }
+    })
+
+    return socket
+  } catch (error) {
+    logSocket.error('Failed to initialize Socket.io', error)
+    throw error
+  }
+}
 
   return socket
 }

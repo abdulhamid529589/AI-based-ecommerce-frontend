@@ -19,7 +19,7 @@ export const useSocket = (clientType = 'frontend') => {
 
   useEffect(() => {
     // Determine socket server URL
-    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:8000'
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || `${window.location.origin}`
 
     console.log(`[useSocket] Connecting to ${socketUrl} as ${clientType}`)
 
@@ -29,6 +29,7 @@ export const useSocket = (clientType = 'frontend') => {
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
       reconnectionAttempts: 5,
+      withCredentials: true,
       transports: ['websocket', 'polling'],
     })
 

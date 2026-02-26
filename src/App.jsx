@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, Suspense, lazy } from 'react'
 import NotificationCenter from './components/Notifications/NotificationCenter'
+import ChatWidget from './components/ChatWidget'
 
 // Security
 import { initializeCsrfToken } from './lib/axios'
@@ -63,6 +64,8 @@ const AppContent = () => {
   const dispatch = useDispatch()
   const { items: cartItems } = useSelector((state) => state.cart)
   const { items: wishlistItems } = useSelector((state) => state.wishlist)
+  const { user } = useSelector((state) => state.auth)
+  const isLoggedIn = !!user
 
   // Initialize CSRF token and fetch products on app mount
   useEffect(() => {
@@ -86,6 +89,9 @@ const AppContent = () => {
       {/* Mobile Components */}
       <FloatingCartButton />
       <BottomTabNav cartCount={cartItems.length} wishlistCount={wishlistItems?.length || 0} />
+
+      {/* Chat Widget - Only visible for logged-in users */}
+      <ChatWidget user={user} isLoggedIn={isLoggedIn} />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Index />} />

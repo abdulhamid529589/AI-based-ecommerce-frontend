@@ -373,3 +373,76 @@
     font-size: 16px; /* Prevents zoom on iOS */
   }
 }
+
+/* Login Prompt for Non-Logged-In Users */
+.login-prompt-container {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  min-height: 300px;
+}
+
+.login-prompt {
+  text-align: center;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.prompt-icon {
+  font-size: 48px;
+  margin: 0;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.prompt-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #667eea;
+  margin: 0;
+}
+
+.prompt-message {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 280px;
+}
+
+.prompt-button {
+  display: inline-block;
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.prompt-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+}
+
+.prompt-button:active {
+  transform: translateY(0);
+}

@@ -150,7 +150,43 @@ export const ChatWidget = ({ user, isLoggedIn }) => {
 
   // Show chat widget only if logged in
   if (!isLoggedIn) {
-    return null
+    return (
+      <div className="chat-widget">
+        {/* Chat Button - Always visible */}
+        {!isOpen && (
+          <button className="chat-button" onClick={() => setIsOpen(true)} title="Chat with owner">
+            💬
+          </button>
+        )}
+
+        {/* Chat Window - Login Prompt */}
+        {isOpen && (
+          <div className="chat-window">
+            {/* Header */}
+            <div className="chat-header">
+              <h3>Chat with Owner</h3>
+              <button className="close-button" onClick={() => setIsOpen(false)}>
+                ✕
+              </button>
+            </div>
+
+            {/* Login Prompt */}
+            <div className="chat-messages login-prompt-container">
+              <div className="login-prompt">
+                <p className="prompt-icon">🔐</p>
+                <p className="prompt-title">Login Required</p>
+                <p className="prompt-message">
+                  Please log in to your account to chat with our owner. We're here to help!
+                </p>
+                <a href="/login" className="prompt-button">
+                  Go to Login
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    )
   }
 
   return (

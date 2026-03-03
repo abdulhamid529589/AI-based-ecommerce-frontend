@@ -223,9 +223,9 @@ export const ChatWidget = ({ user, isLoggedIn }) => {
                 <p>👋 Start a conversation with us!</p>
               </div>
             ) : (
-              messages.map((msg) => (
+              messages.map((msg, index) => (
                 <div
-                  key={msg.id}
+                  key={`${msg.id}-${index}`}
                   className={`message ${msg.senderId === user.id ? 'customer' : 'owner'}`}
                 >
                   {msg.isAutoReply && <div className="auto-reply-badge">Auto Reply</div>}

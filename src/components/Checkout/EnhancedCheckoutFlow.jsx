@@ -1,13 +1,18 @@
 /**
  * 🎯 Enhanced Checkout Experience - INSANE UX
  * Features: One-page checkout, Progress indicator, Sticky summary, Auto-fill
+ * ✅ FIXED: Now uses dashboard settings for shipping and tax
+ * ✅ UPDATED: Supports zone-based shipping costs
  */
 
 import React, { useState, useEffect } from 'react'
 import { ChevronDown, MapPin, Phone, Mail, CreditCard, Loader } from 'lucide-react'
+import { useSystemSettings } from '../../hooks/useSystemSettings'
+import { getShippingCostForDistrict } from '../../utils/districtZoneMapping'
 import './EnhancedCheckout.css'
 
 const EnhancedCheckout = ({ cartItems, onPlaceOrder }) => {
+  const { settings } = useSystemSettings()
   const [currentStep, setCurrentStep] = useState(1)
   const [isProcessing, setIsProcessing] = useState(false)
   const [showSummary, setShowSummary] = useState(false)
@@ -37,9 +42,38 @@ const EnhancedCheckout = ({ cartItems, onPlaceOrder }) => {
   const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
 
+  // Calculate totals using settings from dashboard
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const shippingCost = totalPrice > 2000 ? 0 : 100
-  const tax = Math.round(totalPrice * 0.05)
+
+  // Calculate shipping cost: Check free shipping threshold, then use zone-based or standard cost
+  const calculateShipping = () => {
+    if (
+      settings?.shipping?.freeShippingEnabled &&
+      totalPrice >= (settings?.shipping?.freeShippingThreshold || 5000)
+    ) {
+      return 0 // Free shipping
+    }
+
+    // Use zone-based shipping if city (district) is selected
+    if (formData.city) {
+      const zoneInfo = getShippingCostForDistrict(
+        formData.city,
+        settings?.shipping?.shippingZones || [],
+      )
+      if (zoneInfo.cost > 0) {
+        return zoneInfo.cost
+      }
+    }
+
+    // Fallback to standard shipping cost
+    return settings?.shipping?.standardShippingCost || 100
+  }
+
+  const shippingCost = calculateShipping()
+
+  // Apply tax rate from settings
+  const taxRate = settings?.pricing?.taxRate || 0
+  const tax = Math.round(totalPrice * (taxRate / 100))
   const finalTotal = totalPrice + shippingCost + tax
 
   // Form validation

@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ChevronRight, X, ChevronDown } from 'lucide-react'
 import { useSettings } from '../../contexts/SettingsContext'
 
 const CategoryGrid = () => {
   const { categories } = useSettings()
+  const navigate = useNavigate()
   const [selectedCategory, setSelectedCategory] = useState(null)
   const [expandedSubcategory, setExpandedSubcategory] = useState(null)
 
@@ -51,7 +52,16 @@ const CategoryGrid = () => {
         {categories.map((category) => (
           <button
             key={category.id}
-            onClick={() => setSelectedCategory(category.id)}
+            onClick={() => {
+              // Check if category has subcategories
+              if (category.subcategories && category.subcategories.length > 0) {
+                // Show modal if it has subcategories
+                setSelectedCategory(category.id)
+              } else {
+                // Navigate directly if no subcategories
+                navigate(`/products?category=${getCategoryUrl(category.name)}`)
+              }
+            }}
             className="group glass-card p-4 sm:p-5 md:p-6 text-center hover:glow-on-hover animate-smooth cursor-pointer relative overflow-hidden"
           >
             <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">

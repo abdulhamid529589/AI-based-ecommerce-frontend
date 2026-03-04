@@ -1,5 +1,6 @@
 import { Search, Sparkles, Star, Filter, Loader, X, ChevronDown } from 'lucide-react'
 import { useSettings } from '../contexts/SettingsContext'
+import { useSystemSettings } from '../hooks/useSystemSettings'
 import { EnhancedProductCard } from '../components/Products/EnhancedProductCard'
 import ProductSkeleton from '../components/Products/ProductSkeleton'
 import Pagination from '../components/Products/Pagination'
@@ -19,6 +20,7 @@ const Products = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { categories: settingsCategories } = useSettings()
+  const { settings } = useSystemSettings()
   const { socket, isConnected } = useSocket('frontend')
 
   // Declare state early so it's available in all hooks
@@ -600,6 +602,11 @@ const Products = () => {
                       badge={product.isNew ? 'New' : product.isFeatured ? 'Featured' : undefined}
                       trending={product.trending || Math.random() > 0.7}
                       flashSale={product.isFlashSale || false}
+                      freeShipping={
+                        settings?.shipping?.freeShippingEnabled &&
+                        (product.price || product.discountedPrice || 0) >=
+                          settings.shipping.freeShippingThreshold
+                      }
                       onAddToCart={(id) => {
                         window.showNotification?.('Added to cart!', 'success') ||
                           alert('Added to cart')

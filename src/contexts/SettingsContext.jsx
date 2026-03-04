@@ -54,10 +54,16 @@ export const SettingsProvider = ({ children }) => {
         return { data: { data: {} } }
       })
 
-      const categoriesRes = await api.get(`/content/categories?_t=${Date.now()}`).catch((err) => {
-        console.warn('⚠️ Failed to fetch categories:', err.response?.status, err.message)
-        return { data: [] }
-      })
+      const categoriesRes = await api
+        .get(`/content/categories-with-subcategories?_t=${Date.now()}`)
+        .catch((err) => {
+          console.warn(
+            '⚠️ Failed to fetch categories with subcategories:',
+            err.response?.status,
+            err.message,
+          )
+          return { data: { data: [] } }
+        })
 
       // Parse hero slides from banners - only active ones
       const bannersData = bannersRes.data?.data || []
@@ -79,9 +85,10 @@ export const SettingsProvider = ({ children }) => {
         setHeroSlides(activeSlides.length > 0 ? activeSlides : getDefaultSlides())
       }
 
-      // Parse categories from settings
-      const categoriesData = Array.isArray(categoriesRes.data) ? categoriesRes.data : []
-      setCategories(categoriesData)
+      // Parse categories from settings (now includes subcategories)
+      const categoriesData = categoriesRes.data?.data || categoriesRes.data || []
+      console.log('✅ [SettingsContext] Categories loaded with subcategories:', categoriesData)
+      setCategories(Array.isArray(categoriesData) ? categoriesData : [])
 
       // Parse global settings
       const globalData = globalRes.data?.data || {}

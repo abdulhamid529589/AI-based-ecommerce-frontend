@@ -9,11 +9,13 @@ import {
   updateCartItemOnServer,
   clearCartOnServer,
 } from '../store/thunks/cartThunks'
+import { useSystemSettings } from '../hooks/useSystemSettings'
 import { toast } from 'react-toastify'
 
 const Cart = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { settings } = useSystemSettings()
   const cartState = useSelector((state) => state.cart, shallowEqual)
   const cartItems = useMemo(() => cartState?.items || [], [cartState])
   const isLoading = cartState?.loading || false
@@ -29,7 +31,9 @@ const Cart = () => {
   // Calculate totals
   const subtotal = (cartItems || []).reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = 0 // Shipping cost will be added after selecting district during payment
-  const total = subtotal + shipping
+  const taxRate = settings?.pricing?.taxRate ?? 0
+  const tax = Math.round(subtotal * (taxRate / 100))
+  const total = subtotal + shipping + tax
 
   const handleQuantityChange = (itemId, newQuantity) => {
     if (newQuantity > 0) {
@@ -244,6 +248,12 @@ const Cart = () => {
                   <span>Shipping:</span>
                   <span>Calculated at checkout</span>
                 </div>
+                {taxRate > 0 && (
+                  <div className="flex justify-between text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+                    <span>Tax ({taxRate}%):</span>
+                    <span>৳{tax.toLocaleString('en-BD', { maximumFractionDigits: 0 })}</span>
+                  </div>
+                )}
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-3 sm:pt-4 flex justify-between font-bold text-base sm:text-lg text-gray-900 dark:text-white">
                   <span>Total:</span>
                   <span>৳{total.toLocaleString('en-BD', { maximumFractionDigits: 0 })}</span>

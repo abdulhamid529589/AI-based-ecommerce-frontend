@@ -23,6 +23,7 @@ export const EnhancedProductCard = ({
   onQuickView,
   trending = false,
   flashSale = false,
+  freeShipping = false,
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
@@ -82,6 +83,15 @@ export const EnhancedProductCard = ({
               >
                 <TrendingUp size={12} />
                 Trending
+              </div>
+            )}
+
+            {freeShipping && (
+              <div
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full
+                bg-green-500 text-white text-xs font-bold shadow-lg backdrop-blur-sm"
+              >
+                <span>🚚 Free Ship</span>
               </div>
             )}
 

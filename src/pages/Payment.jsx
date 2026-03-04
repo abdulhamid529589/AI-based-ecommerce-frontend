@@ -6,6 +6,7 @@ import { axiosInstance } from '../lib/axios'
 import { toast } from 'react-toastify'
 import { clearCart } from '../store/slices/cartSlice'
 import { getOperationErrorMessage } from '../utils/errorHandler'
+import { useSystemSettings } from '../hooks/useSystemSettings'
 
 // Bangladesh Divisions and Districts
 const BANGLADESH_DATA = {
@@ -69,6 +70,9 @@ const Payment = () => {
   const { user } = useSelector((state) => state.auth)
   const cartItems = useSelector((state) => state.cart?.items || [])
 
+  // Get system settings (shipping, tax, pricing, etc.)
+  const { settings, loading: settingsLoading } = useSystemSettings()
+
   // Shipping details state
   const [shippingDetails, setShippingDetails] = useState({
     fullName: user?.name || '',
@@ -80,7 +84,7 @@ const Payment = () => {
     country: 'Bangladesh',
   })
 
-  // Calculate shipping based on district
+  // Calculate shipping based on district and settings
   const calculateShipping = () => {
     if (subtotal === 0) return 0
 
@@ -89,11 +93,16 @@ const Payment = () => {
       return 0
     }
 
-    const district = shippingDetails.district.toLowerCase().trim()
-    if (district === 'chittagong' || district === 'চট্টগ্রাম') {
-      return 60
+    // Check if free shipping is enabled and threshold is met
+    if (
+      settings?.shipping?.freeShippingEnabled &&
+      subtotal >= settings.shipping.freeShippingThreshold
+    ) {
+      return 0 // Free shipping
     }
-    return 100 // Default for all other districts
+
+    // Use standard shipping cost from settings
+    return settings?.shipping?.standardShippingCost || 100
   }
 
   // Calculate totals

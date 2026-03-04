@@ -7,29 +7,35 @@ import { useSystemSettings } from '../hooks/useSystemSettings'
 import { toast } from 'react-toastify'
 import { clearCart } from '../store/slices/cartSlice'
 import { getOperationErrorMessage } from '../utils/errorHandler'
+import { getShippingCostForDistrict, formatZoneDisplay } from '../utils/districtZoneMapping'
 
-// Bangladesh Divisions and Districts
+// Bangladesh Divisions and Districts (Complete list with all 64 districts)
+// Reference: Bangladesh national administrative divisions
 const BANGLADESH_DATA = {
   Dhaka: [
     'Dhaka',
     'Faridpur',
     'Gazipur',
     'Gopalganj',
+    'Kishoreganj',
+    'Madaripur',
     'Manikganj',
     'Munshiganj',
     'Narayanganj',
+    'Narsingdi',
+    'Rajbari',
     'Shariatpur',
     'Tangail',
   ],
-  Chittagong: [
-    'Chittagong',
+  Chattogram: [
+    'Chattogram',
     'Bandarban',
     'Brahmanbaria',
     'Chandpur',
     'Comilla',
     "Cox's Bazar",
     'Feni',
-    'Khagrachari',
+    'Khagrachhari',
     'Lakshmipur',
     'Noakhali',
     'Rangamati',
@@ -37,18 +43,26 @@ const BANGLADESH_DATA = {
   Khulna: [
     'Bagerhat',
     'Chuadanga',
-    'Jessore',
+    'Jashore',
     'Jhenaidah',
     'Khulna',
+    'Kushtia',
     'Magura',
+    'Meherpur',
     'Narail',
     'Satkhira',
   ],
-  Rajshahi: ['Bogura', 'Joypurhat', 'Naogaon', 'Natore', 'Nawalpur', 'Rajshahi'],
-  Barishal: ['Barishal', 'Bhola', 'Jhalokati', 'Patuakhali', 'Pirojpur'],
-  Sylhet: ['Habiganj', 'Moulvibazar', 'Sunamganj', 'Sylhet'],
-  Rangpur: [
+  Rajshahi: [
     'Bogura',
+    'Joypurhat',
+    'Naogaon',
+    'Natore',
+    'Chapai Nawabganj',
+    'Pabna',
+    'Rajshahi',
+    'Sirajganj',
+  ],
+  Rangpur: [
     'Dinajpur',
     'Gaibandha',
     'Kurigram',
@@ -58,6 +72,8 @@ const BANGLADESH_DATA = {
     'Rangpur',
     'Thakurgaon',
   ],
+  Barishal: ['Barguna', 'Barishal', 'Bhola', 'Jhalokati', 'Patuakhali', 'Pirojpur'],
+  Sylhet: ['Habiganj', 'Maulvibazar', 'Sunamganj', 'Sylhet'],
   Mymensingh: ['Jamalpur', 'Mymensingh', 'Netrokona', 'Sherpur'],
 }
 
@@ -99,10 +115,13 @@ const Checkout = () => {
     country: 'Bangladesh',
   })
 
+  // Track selected shipping zone
+  const [selectedShippingZone, setSelectedShippingZone] = useState(null)
+
   // Validation errors
   const [errors, setErrors] = useState({})
 
-  // Calculate shipping - Dynamic from settings
+  // Calculate shipping - Dynamic from settings with zone support
   const calculateShipping = () => {
     if (subtotal === 0) return 0
     if (!shippingDetails.district || shippingDetails.district.trim() === '') return 0
@@ -115,15 +134,30 @@ const Checkout = () => {
       return 0 // Free shipping
     }
 
-    // Use dynamic shipping cost from settings
+    // Get zone-based shipping cost
+    const zoneInfo = getShippingCostForDistrict(
+      shippingDetails.district,
+      settings?.shipping?.shippingZones || [],
+    )
+
+    if (zoneInfo.cost > 0) {
+      console.log(
+        `✅ [Checkout] Zone-based shipping for ${shippingDetails.district}: ৳${zoneInfo.cost} (${zoneInfo.zone?.name})`,
+      )
+      return zoneInfo.cost
+    }
+
+    // Fallback to standard shipping cost if zone not found
+    console.log(`⚠️ [Checkout] No zone found for ${shippingDetails.district}, using standard cost`)
     return settings?.shipping?.standardShippingCost || 100
   }
 
   // Calculate totals
   const subtotal = (cartItems || []).reduce((sum, item) => sum + item.price * item.quantity, 0)
   const shipping = calculateShipping()
-  // Dynamic tax rate from settings
-  const taxRate = settings?.pricing?.taxRate || 15
+
+  // Dynamic tax rate from settings (defaults to 0 if not configured)
+  const taxRate = settings?.pricing?.taxRate ?? 0
   const tax = Math.round(subtotal * (taxRate / 100))
   const total = subtotal + shipping + tax
 
@@ -149,6 +183,18 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }))
+
+    // If district changes, update the selected shipping zone
+    if (name === 'district' && value) {
+      const zoneInfo = getShippingCostForDistrict(value, settings?.shipping?.shippingZones || [])
+      setSelectedShippingZone(zoneInfo.zone || null)
+      console.log(`📍 [Checkout] District changed to "${value}":`, {
+        zoneName: zoneInfo.zone?.name,
+        zoneCost: zoneInfo.zone?.cost,
+        deliveryDays: zoneInfo.zone?.deliveryDays,
+      })
+    }
+
     // Clear error for this field
     if (errors[name]) {
       setErrors((prev) => ({
@@ -262,6 +308,16 @@ const Checkout = () => {
         paymentMethod: paymentMethod.toUpperCase(),
         paymentStatus: 'pending',
         total_price: total,
+        // Include shipping zone information for order tracking and customer service
+        shippingZone: selectedShippingZone
+          ? {
+              name: selectedShippingZone.name,
+              cost: selectedShippingZone.cost,
+              deliveryDays: selectedShippingZone.deliveryDays,
+            }
+          : null,
+        shippingCost: shipping,
+        taxAmount: tax,
       }
       console.log('🔹 [Checkout] Order Payload:', JSON.stringify(orderPayload, null, 2))
 
@@ -555,6 +611,23 @@ const Checkout = () => {
                       {errors.district && (
                         <p className="text-red-500 text-xs mt-1">{errors.district}</p>
                       )}
+                      {/* Show selected shipping zone */}
+                      {selectedShippingZone && (
+                        <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg text-sm">
+                          <p className="text-gray-700 dark:text-gray-300">
+                            <span className="font-semibold">📍 Shipping Zone:</span>{' '}
+                            {selectedShippingZone.name}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            <span className="font-semibold">🚚 Shipping Cost:</span> ৳
+                            {selectedShippingZone.cost}
+                          </p>
+                          <p className="text-gray-600 dark:text-gray-400 mt-1">
+                            <span className="font-semibold">⏱️ Delivery:</span>{' '}
+                            {selectedShippingZone.deliveryDays}
+                          </p>
+                        </div>
+                      )}{' '}
                     </div>
                   )}
                 </div>
